@@ -1,0 +1,25 @@
+{
+  "$schema": "./config-schema.json",
+  "coverageThreshold": 40,
+  "ignoredPaths": [
+    "node_modules/**",
+    "dist/**",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ],
+  "outputFormat": "terminal",
+  "coveragePath": "coverage/lcov.info",
+  "openapiPath": "openapi.yaml",
+  "baseRef": "main",
+  "failOn": "high",
+  "jira": {
+    "instanceUrl": "https://your-org.atlassian.net",
+    "projectKey": "DEPLOY",
+    "autoCreateSeverity": "critical"
+  },
+  "confluence": {
+    "instanceUrl": "https://your-org.atlassian.net/wiki",
+    "spaceKey": "DEPLOY",
+    "parentPageId": "123456"
+  }
+}

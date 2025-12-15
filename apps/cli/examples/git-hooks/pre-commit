@@ -1,0 +1,45 @@
+#!/bin/bash
+# Git pre-commit hook for deployment risk analysis
+# 
+# Installation:
+#   cp examples/git-hooks/pre-commit .git/hooks/pre-commit
+#   chmod +x .git/hooks/pre-commit
+#
+# Or with husky:
+#   npx husky add .husky/pre-commit "npx deploy-check analyze --fail-on high"
+#
+# Requirements: 2.6
+
+# Configuration - customize these as needed
+FAIL_ON="${DEPLOY_CHECK_FAIL_ON:-high}"
+
+# Check if deploy-check is available
+if ! command -v deploy-check &> /dev/null; then
+    # Try npx as fallback
+    if command -v npx &> /dev/null; then
+        DEPLOY_CHECK="npx @dra/cli"
+    else
+        echo "⚠️  deploy-check not found, skipping risk analysis"
+        exit 0
+    fi
+else
+    DEPLOY_CHECK="deploy-check"
+fi
+
+echo "🔍 Analyzing deployment risks..."
+
+# Run analysis
+$DEPLOY_CHECK analyze --fail-on "$FAIL_ON"
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -eq 0 ]; then
+    echo "✅ Risk analysis passed"
+elif [ $EXIT_CODE -eq 1 ]; then
+    echo "⚠️  Medium risk detected - review findings"
+    # Allow commit but warn
+    exit 0
+else
+    echo "❌ High/Critical risk detected - commit blocked"
+    echo "   Use 'git commit --no-verify' to bypass"
+    exit 1
+fi

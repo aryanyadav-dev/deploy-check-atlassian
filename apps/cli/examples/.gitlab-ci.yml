@@ -1,0 +1,180 @@
+# GitLab CI configuration for deployment risk analysis
+# This pipeline runs deploy-check on merge requests and uploads reports as artifacts
+#
+# Requirements: 2.6
+
+stages:
+  - test
+  - analyze
+  - report
+
+variables:
+  NODE_VERSION: "18"
+  # Configure risk threshold (low, medium, high, critical)
+  RISK_FAIL_THRESHOLD: "high"
+
+# Cache node_modules between jobs
+.node_cache: &node_cache
+  cache:
+    key:
+      files:
+        - package-lock.json
+        - pnpm-lock.yaml
+    paths:
+      - node_modules/
+      - .pnpm-store/
+
+# Base job for Node.js
+.node_base:
+  image: node:${NODE_VERSION}
+  <<: *node_cache
+  before_script:
+    - npm install -g @dra/cli
+
+# Run tests with coverage (optional, generates coverage for analysis)
+test:
+  extends: .node_base
+  stage: test
+  script:
+    - npm ci
+    - npm test -- --coverage
+  coverage: '/Lines\s*:\s*(\d+\.?\d*)%/'
+  artifacts:
+    paths:
+      - coverage/
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+# Deployment risk analysis
+deploy-check:
+  extends: .node_base
+  stage: analyze
+  script:
+    # Fetch full history for diff analysis
+    - git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME --depth=100
+    
+    # Run analysis against target branch
+    - |
+      deploy-check analyze \
+        --base origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME \
+        --head $CI_COMMIT_SHA \
+        --coverage coverage/lcov.info \
+        --json > analysis-result.json || true
+    
+    # Generate markdown report
+    - |
+      deploy-check analyze \
+        --base origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME \
+        --head $CI_COMMIT_SHA \
+        --coverage coverage/lcov.info \
+        --output analysis-report.md || true
+    
+    # Generate runbook
+    - |
+      deploy-check runbook \
+        --output deployment-runbook.md \
+        --include-migrations || true
+    
+    # Extract risk level and check threshold
+    - |
+      RISK_LEVEL=$(cat analysis-result.json | jq -r '.riskLevel // "low"')
+      RISK_SCORE=$(cat analysis-result.json | jq -r '.riskScore // 0')
+      echo "Risk Level: $RISK_LEVEL (Score: $RISK_SCORE)"
+      
+      # Fail if risk exceeds threshold
+      case "$RISK_FAIL_THRESHOLD" in
+        "low")
+          if [ "$RISK_LEVEL" != "low" ]; then
+            echo "Risk level $RISK_LEVEL exceeds threshold $RISK_FAIL_THRESHOLD"
+            exit 1
+          fi
+          ;;
+        "medium")
+          if [ "$RISK_LEVEL" = "high" ] || [ "$RISK_LEVEL" = "critical" ]; then
+            echo "Risk level $RISK_LEVEL exceeds threshold $RISK_FAIL_THRESHOLD"
+            exit 1
+          fi
+          ;;
+        "high")
+          if [ "$RISK_LEVEL" = "critical" ]; then
+            echo "Risk level $RISK_LEVEL exceeds threshold $RISK_FAIL_THRESHOLD"
+            exit 1
+          fi
+          ;;
+      esac
+  artifacts:
+    paths:
+      - analysis-result.json
+      - analysis-report.md
+      - deployment-runbook.md
+    reports:
+      dotenv: deploy-check.env
+    expire_in: 1 month
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  needs:
+    - job: test
+      optional: true
+
+# Post analysis results as MR comment (requires GitLab API token)
+post-mr-comment:
+  extends: .node_base
+  stage: report
+  script:
+    - |
+      # Read analysis results
+      RISK_LEVEL=$(cat analysis-result.json | jq -r '.riskLevel // "unknown"')
+      RISK_SCORE=$(cat analysis-result.json | jq -r '.riskScore // 0')
+      FINDINGS_COUNT=$(cat analysis-result.json | jq -r '.findings | length // 0')
+      
+      # Build comment body
+      COMMENT="## 🔍 Deployment Risk Analysis\n\n"
+      COMMENT+="**Risk Level:** ${RISK_LEVEL^^} | **Score:** ${RISK_SCORE}/100 | **Findings:** ${FINDINGS_COUNT}\n\n"
+      
+      if [ "$FINDINGS_COUNT" -gt 0 ]; then
+        COMMENT+="### Top Findings\n\n"
+        COMMENT+="| Type | Severity | File |\n"
+        COMMENT+="|------|----------|------|\n"
+        COMMENT+=$(cat analysis-result.json | jq -r '.findings[:10][] | "| \(.type) | \(.severity) | `\(.filePath // "-")` |"')
+        COMMENT+="\n"
+      else
+        COMMENT+="✅ No deployment risks detected.\n"
+      fi
+      
+      COMMENT+="\n---\n*See artifacts for full report and runbook*"
+      
+      # Post comment to MR using GitLab API
+      curl --request POST \
+        --header "PRIVATE-TOKEN: ${GITLAB_API_TOKEN}" \
+        --header "Content-Type: application/json" \
+        --data "{\"body\": \"${COMMENT}\"}" \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: always
+  needs:
+    - deploy-check
+  allow_failure: true
+
+# Publish runbook to Confluence (optional)
+publish-runbook:
+  extends: .node_base
+  stage: report
+  script:
+    - |
+      deploy-check confluence publish \
+        --space "$CONFLUENCE_SPACE_KEY" \
+        --title "Deployment Runbook - MR !${CI_MERGE_REQUEST_IID}" \
+        --runbook
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
+  needs:
+    - deploy-check
+  allow_failure: true

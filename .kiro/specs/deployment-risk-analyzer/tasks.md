@@ -1,0 +1,341 @@
+# Implementation Plan
+
+- [x] 1. Project scaffolding and infrastructure setup
+  - [x] 1.1 Create monorepo structure with apps/cli and libs directories
+    - Initialize pnpm workspace with turbo for monorepo management
+    - Configure TypeScript with strict mode and path aliases
+    - Set up shared ESLint and Prettier configurations
+    - _Requirements: 12.1_
+  - [x] 1.2 Create shared types library (@dra/types)
+    - Define Finding, AnalysisResult, RiskScore interfaces
+    - Define analyzer interfaces
+    - _Requirements: 12.1_
+
+- [-] 2. Core analyzer infrastructure
+  - [x] 2.1 Implement analyzer plugin interface and registry
+    - Create Analyzer interface with name, supportedExtensions, analyze method
+    - Create AnalysisContext and FileChange types
+    - Implement AnalyzerRegistry for registering and retrieving analyzers
+    - _Requirements: 12.1, 12.2, 12.3_
+  - [x] 2.2 Write property test for analyzer configuration round-trip
+    - **Property 7: Analyzer Configuration Round-Trip**
+    - **Validates: Requirements 12.4**
+  - [x] 2.3 Implement TypeScript AST analyzer for exported function signature detection
+    - Use TypeScript compiler API to parse source files
+    - Detect changes in exported function signatures (parameters, return types)
+    - Generate BREAKING_API findings for signature changes
+    - _Requirements: 2.2, 2.7_
+  - [x] 2.4 Write property test for TypeScript AST round-trip
+    - **Property 1: TypeScript AST Round-Trip**
+    - **Validates: Requirements 2.7**
+  - [x] 2.5 Write property test for exported function signature detection
+    - **Property 9: Exported Function Signature Change Detection**
+    - **Validates: Requirements 2.2**
+  - [x] 2.6 Implement SQL migration analyzer
+    - Detect migration file paths matching `migrations/*` or `db/migrate/*`
+    - Parse SQL for DROP TABLE, DROP COLUMN, ALTER TYPE statements
+    - Generate DESTRUCTIVE_MIGRATION findings with HIGH/CRITICAL severity
+    - _Requirements: 2.3, 2.4_
+  - [x] 2.7 Write property test for migration path pattern matching
+    - **Property 10: Migration Path Pattern Matching**
+    - **Validates: Requirements 2.3**
+  - [x] 2.8 Write property test for destructive SQL detection
+    - **Property 11: Destructive SQL Operation Detection**
+    - **Validates: Requirements 2.4**
+  - [x] 2.9 Implement permission pattern analyzer
+    - Scan diffs for ACL patterns (hasPermission, isAdmin, role checks)
+    - Generate PERMISSION_CHANGE findings
+    - _Requirements: 2.5_
+  - [x] 2.10 Write property test for permission pattern detection
+    - **Property 12: Permission Pattern Detection**
+    - **Validates: Requirements 2.5**
+  - [x] 2.11 Write property test for unsupported file handling
+    - **Property 28: Unsupported File Graceful Handling**
+    - **Validates: Requirements 12.2**
+
+- [x] 3. Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 4. Coverage and OpenAPI analyzers
+  - [x] 4.1 Implement lcov coverage parser
+    - Parse lcov format to extract line, branch, function coverage per file
+    - Map coverage data to modified files
+    - _Requirements: 3.1, 3.4_
+  - [x] 4.2 Write property test for lcov parsing completeness
+    - **Property 17: LCOV Parsing Completeness**
+    - **Validates: Requirements 3.1, 3.4**
+  - [x] 4.3 Implement coverage threshold analyzer
+    - Compare file coverage against configurable threshold (default 40%)
+    - Generate LOW_COVERAGE findings for files below threshold
+    - _Requirements: 3.2_
+  - [x] 4.4 Write property test for coverage threshold detection
+    - **Property 18: Coverage Threshold Detection**
+    - **Validates: Requirements 3.2**
+  - [x] 4.5 Write property test for coverage data serialization round-trip
+    - **Property 2: Coverage Data Serialization Round-Trip**
+    - **Validates: Requirements 3.5**
+  - [x] 4.6 Implement OpenAPI diff analyzer
+    - Compare old and new OpenAPI specs for breaking changes
+    - Detect removed endpoints, added required parameters
+    - Generate BREAKING_API findings with HIGH severity
+    - _Requirements: 10.1, 10.3_
+  - [x] 4.7 Write property test for OpenAPI breaking change detection
+    - **Property 13: OpenAPI Breaking Change Detection**
+    - **Validates: Requirements 10.1, 10.3**
+  - [x] 4.8 Write property test for OpenAPI specification round-trip
+    - **Property 6: OpenAPI Specification Round-Trip**
+    - **Validates: Requirements 10.4**
+  - [x] 4.9 Implement undocumented API change detector
+    - Detect route handler modifications without OpenAPI spec changes
+    - Generate UNDOCUMENTED_API findings
+    - _Requirements: 10.2_
+  - [x] 4.10 Write property test for undocumented API detection
+    - **Property 14: Undocumented API Change Detection**
+    - **Validates: Requirements 10.2**
+
+- [x] 5. Risk scoring and runbook generation
+  - [x] 5.1 Implement risk score calculator
+    - Sum base scores: BREAKING_API(40), DESTRUCTIVE_MIGRATION(50), PERMISSION_CHANGE(30), LOW_COVERAGE(20), UNDOCUMENTED_API(10)
+    - Classify severity: CRITICAL(≥80), HIGH(60-79), MEDIUM(35-59), LOW(<35)
+    - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
+  - [x] 5.2 Write property test for risk score calculation
+    - **Property 15: Risk Score Calculation**
+    - **Validates: Requirements 4.1**
+  - [x] 5.3 Write property test for risk severity classification
+    - **Property 16: Risk Severity Classification**
+    - **Validates: Requirements 4.2, 4.3, 4.4, 4.5**
+  - [x] 5.4 Write property test for risk score serialization round-trip
+    - **Property 3: Risk Score Serialization Round-Trip**
+    - **Validates: Requirements 4.6**
+  - [x] 5.5 Implement runbook generator
+    - Generate markdown with pre-deploy, deploy, post-deploy, rollback sections
+    - Include migration commands when DESTRUCTIVE_MIGRATION findings present
+    - Add data loss warnings for destructive operations
+    - _Requirements: 5.1, 5.2, 5.4_
+  - [x] 5.6 Write property test for runbook required sections
+    - **Property 19: Runbook Required Sections**
+    - **Validates: Requirements 5.1**
+  - [x] 5.7 Write property test for runbook migration commands
+    - **Property 20: Runbook Migration Commands**
+    - **Validates: Requirements 5.2, 5.4**
+  - [x] 5.8 Write property test for runbook markdown round-trip
+    - **Property 4: Runbook Markdown Round-Trip**
+    - **Validates: Requirements 5.6**
+
+- [x] 6. Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 7. Security utilities
+  - [x] 7.1 Implement token encryption for config storage
+    - Encrypt API tokens stored in local config file
+    - Support system keychain integration (optional)
+    - _Requirements: 6.1_
+  - [x] 7.2 Write property test for token encryption round-trip
+    - **Property 8: Token Encryption Round-Trip**
+    - **Validates: Requirements 8.5**
+  - [x] 7.3 Implement output sanitization
+    - Sanitize and escape HTML in generated reports
+    - _Requirements: 11.3_
+  - [x] 7.4 Write property test for XSS sanitization
+    - **Property 22: XSS Sanitization**
+    - **Validates: Requirements 11.3**
+
+- [x] 8. CLI tool setup and structure
+  - [x] 8.1 Create CLI app structure in apps/cli directory
+    - Initialize new package with TypeScript and Commander.js
+    - Configure bin entry point for `deploy-check` command
+    - Set up tsconfig extending base config
+    - Add build scripts for CLI compilation
+    - _Requirements: 12.1_
+  - [x] 8.2 Implement main CLI entry point with Commander.js
+    - Create `deploy-check` command with subcommands: `analyze`, `config`, `report`
+    - Add global options: `--verbose`, `--json`, `--config <path>`
+    - Implement help text and version display
+    - _Requirements: 7.1_
+  - [x] 8.3 Create CLI configuration file support
+    - Support `.deploy-check.json` or `.deploy-check.yaml` config file
+    - Allow setting coverage threshold, ignored paths, output format
+    - Implement config file discovery (current dir, home dir)
+    - _Requirements: 3.2, 12.4_
+
+- [x] 9. Git integration for CLI
+  - [x] 9.1 Implement git diff parser for local changes
+    - Parse `git diff` output to extract changed files and hunks
+    - Support comparing against specific branches/commits
+    - Handle staged vs unstaged changes
+    - _Requirements: 2.1_
+  - [x] 9.2 Implement file content reader for git
+    - Read current file content from working directory
+    - Read previous file content from git history
+    - Support reading from specific commits/branches
+    - _Requirements: 2.1, 2.2_
+  - [x] 9.3 Create analysis context builder for CLI
+    - Build AnalysisContext from git diff and file contents
+    - Map file changes to FileChange interface
+    - Detect repository root and relative paths
+    - _Requirements: 2.1, 12.1_
+
+- [x] 10. CLI analyze command implementation
+  - [x] 10.1 Implement `deploy-check analyze` command
+    - Accept optional `--base <ref>` to compare against (default: main/master)
+    - Accept optional `--head <ref>` for target commit (default: HEAD)
+    - Accept optional `--files <glob>` to limit analysis scope
+    - _Requirements: 2.1, 2.2, 2.3_
+  - [x] 10.2 Wire up existing analyzers to CLI
+    - Register TypeScript, SQL, Permission, Coverage, OpenAPI analyzers
+    - Run all applicable analyzers based on file extensions
+    - Aggregate findings from all analyzers
+    - _Requirements: 2.2, 2.3, 2.4, 2.5, 10.1, 10.2_
+  - [x] 10.3 Implement coverage report discovery
+    - Auto-detect lcov.info in common locations (coverage/, .coverage/)
+    - Accept `--coverage <path>` to specify coverage file
+    - Skip coverage analysis if no report found (with warning)
+    - _Requirements: 3.1, 3.3_
+  - [x] 10.4 Implement OpenAPI spec discovery
+    - Auto-detect openapi.yaml/json, swagger.yaml/json in common locations
+    - Accept `--openapi <path>` to specify spec file
+    - Compare current vs base version for breaking changes
+    - _Requirements: 10.1, 10.4_
+
+- [x] 11. CLI output and reporting
+  - [x] 11.1 Implement terminal output formatter
+    - Display findings with colored severity indicators (chalk)
+    - Show file path, line numbers, and code snippets
+    - Display risk score with visual progress bar
+    - _Requirements: 7.2, 7.3_
+  - [x] 11.2 Implement JSON output format
+    - Output structured JSON with `--json` flag
+    - Include all findings, risk score, and metadata
+    - Support piping to other tools (jq, etc.)
+    - _Requirements: 4.6, 9.5_
+  - [x] 11.3 Implement markdown report generation
+    - Generate markdown report with `--output <file.md>`
+    - Include summary, findings by category, and runbook
+    - Support custom templates via config
+    - _Requirements: 5.5, 5.6_
+  - [x] 11.4 Implement exit codes for CI integration
+    - Exit 0: No findings or all LOW severity
+    - Exit 1: MEDIUM severity findings
+    - Exit 2: HIGH or CRITICAL severity findings
+    - Support `--fail-on <level>` to customize threshold
+    - _Requirements: 4.2, 4.3, 4.4, 4.5_
+
+- [x] 12. Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 13. CLI runbook command
+  - [x] 13.1 Implement `deploy-check runbook` command
+    - Generate deployment runbook for current changes
+    - Output to stdout or file with `--output <file>`
+    - Include all sections: pre-deploy, deploy, post-deploy, rollback
+    - _Requirements: 5.1, 5.2, 5.4_
+  - [x] 13.2 Implement runbook customization options
+    - Accept `--template <path>` for custom runbook template
+    - Support `--include-migrations` to add migration commands
+    - Support `--feature-flags` to include feature flag steps
+    - _Requirements: 5.3, 5.4_
+
+- [x] 14. CLI config command
+  - [x] 14.1 Implement `deploy-check config init` command
+    - Generate default `.deploy-check.json` config file
+    - Interactive prompts for coverage threshold, ignored paths
+    - _Requirements: 3.2, 12.4_
+  - [x] 14.2 Implement `deploy-check config show` command
+    - Display current effective configuration
+    - Show config file location and merged values
+    - _Requirements: 12.4_
+
+- [x] 15. Jira integration for CLI
+  - [x] 15.1 Implement `deploy-check jira auth` command
+    - Prompt for Jira instance URL and API token
+    - Store credentials securely in config file (encrypted or keychain)
+    - Validate credentials by fetching user profile
+    - _Requirements: 6.1_
+  - [x] 15.2 Implement `deploy-check jira create` command
+    - Create Jira issues for findings from latest analysis
+    - Accept `--severity <level>` to filter (default: HIGH, CRITICAL)
+    - Accept `--project <key>` to specify target project
+    - Include finding title, description, severity, and file location
+    - _Requirements: 6.2, 6.5_
+  - [x] 15.3 Implement Jira issue linking
+    - Store created issue keys in local analysis cache
+    - Display linked issues in analysis output
+    - Accept `--link <issue-key>` to link finding to existing issue
+    - _Requirements: 6.3_
+  - [x] 15.4 Implement `deploy-check jira status` command
+    - Fetch and display status of linked Jira issues
+    - Show issue key, status, assignee, last updated
+    - _Requirements: 6.4_
+
+- [x] 16. Confluence integration for CLI
+  - [x] 16.1 Implement `deploy-check confluence auth` command
+    - Prompt for Confluence instance URL and API token
+    - Store credentials securely in config file (encrypted or keychain)
+    - Validate credentials by fetching user profile
+    - _Requirements: 6.1_
+  - [x] 16.2 Implement `deploy-check confluence publish` command
+    - Publish analysis report to Confluence page
+    - Accept `--space <key>` to specify target space
+    - Accept `--parent <page-id>` to nest under existing page
+    - Accept `--title <title>` for page title (default: "Deploy Risk Report - {date}")
+    - _Requirements: 5.5, 5.6_
+  - [x] 16.3 Implement runbook publishing to Confluence
+    - Publish generated runbook as Confluence page with `--runbook` flag
+    - Convert markdown to Confluence storage format (ADF)
+    - Include collapsible sections for pre-deploy, deploy, rollback
+    - _Requirements: 5.1, 5.5_
+  - [x] 16.4 Implement Confluence page update mode
+    - Accept `--update <page-id>` to update existing page instead of creating new
+    - Preserve page history with version comments
+    - Support `--append` to add to existing content
+    - _Requirements: 5.5_
+  - [x] 16.5 Implement `deploy-check confluence list` command
+    - List previously published reports in a space
+    - Show page title, date, risk level summary
+    - Accept `--space <key>` to filter by space
+    - _Requirements: 5.5_
+
+- [x] 17. CLI global installation and packaging
+  - [x] 17.1 Configure npm package for global installation
+    - Set up package.json bin field for `deploy-check`
+    - Configure bundling with esbuild or tsup for single executable
+    - Add postinstall script for any setup needed
+    - _Requirements: 12.1_
+  - [x] 17.2 Create standalone binary builds
+    - Use pkg or similar to create standalone binaries
+    - Build for macOS, Linux, Windows
+    - Add to releases for direct download
+    - _Requirements: 12.1_
+
+- [ ] 18. Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 19. CI/CD integration examples
+  - [x] 18.1 Create GitHub Actions workflow example
+    - Example workflow running `deploy-check analyze` on PRs
+    - Post findings as PR comment
+    - Fail PR checks based on risk level
+    - _Requirements: 2.6, 4.2_
+  - [x] 18.2 Create GitLab CI example
+    - Example .gitlab-ci.yml with deploy-check stage
+    - Artifact upload for reports
+    - _Requirements: 2.6_
+  - [x] 18.3 Create pre-commit hook example
+    - Example pre-commit config for local checks
+    - Run analysis before allowing commits
+    - _Requirements: 2.6_
+
+- [-] 20. Documentation
+  - [x] 20.1 Create CLI README with usage examples
+    - Installation instructions (npm, binary download)
+    - Command reference with all options
+    - Configuration file format documentation
+    - _Requirements: N/A (documentation)_
+  - [x] 20.2 Create CI integration guide
+    - Step-by-step setup for GitHub Actions, GitLab CI
+    - Best practices for threshold configuration
+    - Troubleshooting common issues
+    - _Requirements: N/A (documentation)_
+
+- [x] 21. Final Checkpoint - Ensure all tests pass
+  - Ensure all tests pass, ask the user if questions arise.

@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+# Husky pre-commit hook for deployment risk analysis
+#
+# Installation:
+#   1. Install husky: npm install -D husky
+#   2. Initialize husky: npx husky install
+#   3. Copy this file to .husky/pre-commit
+#   4. Make executable: chmod +x .husky/pre-commit
+#
+# Requirements: 2.6
+
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run deployment risk analysis
+# Fails on HIGH or CRITICAL risks by default
+npx deploy-check analyze --fail-on high
+
+# Exit code handling:
+# 0 = No risks or LOW severity only - allow commit
+# 1 = MEDIUM severity - allow commit (warning shown)
+# 2 = HIGH/CRITICAL severity - block commit

@@ -1,0 +1,48 @@
+# Pre-commit configuration for deployment risk analysis
+# This runs deploy-check before allowing commits to catch risks early
+#
+# Requirements: 2.6
+#
+# Installation:
+#   1. Install pre-commit: pip install pre-commit
+#   2. Copy this file to your project root as .pre-commit-config.yaml
+#   3. Run: pre-commit install
+#
+# Usage:
+#   - Runs automatically on git commit
+#   - Skip with: git commit --no-verify
+#   - Run manually: pre-commit run deploy-check
+
+repos:
+  # Standard pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+
+  # Deployment risk analysis
+  - repo: local
+    hooks:
+      - id: deploy-check
+        name: Deployment Risk Analysis
+        entry: deploy-check-hook
+        language: script
+        pass_filenames: false
+        stages: [commit]
+        # Only run when specific file types are changed
+        types_or: [javascript, typescript, sql, yaml, json]
+        # Skip for certain paths
+        exclude: |
+          (?x)^(
+            node_modules/|
+            dist/|
+            coverage/|
+            \.git/|
+            __tests__/|
+            test/|
+            fixtures/
+          )
