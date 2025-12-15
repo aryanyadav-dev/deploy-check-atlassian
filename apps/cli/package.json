@@ -1,5 +1,5 @@
 {
-  "name": "@dra/cli",
+  "name": "deploy-check-cli",
   "version": "0.0.1",
   "description": "Deployment Risk Analyzer CLI - Analyze code changes for deployment risks",
   "private": false,
