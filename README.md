@@ -1,6 +1,9 @@
-# @dra/cli - Deployment Risk Analyzer CLI
+# deploy-check-cli - Deployment Risk Analyzer
 
-A command-line tool that analyzes code changes for deployment risks, including database migrations, breaking API changes, permission changes, and test coverage gaps.
+A command-line tool that analyzes code changes for deployment risks, including database migrations, breaking API changes, permission changes, and test coverage gaps. Integrates with Atlassian Jira and Confluence.
+
+[![npm version](https://img.shields.io/npm/v/deploy-check-cli.svg)](https://www.npmjs.com/package/deploy-check-cli)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Table of Contents
 
@@ -18,30 +21,30 @@ A command-line tool that analyzes code changes for deployment risks, including d
 ### Via npm (global)
 
 ```bash
-npm install -g @dra/cli
+npm install -g deploy-check-cli
 ```
 
 ### Via pnpm
 
 ```bash
-pnpm add -g @dra/cli
+pnpm add -g deploy-check-cli
 ```
 
 ### Via yarn
 
 ```bash
-yarn global add @dra/cli
+yarn global add deploy-check-cli
 ```
 
 ### Via npx (no installation)
 
 ```bash
-npx @dra/cli analyze
+npx deploy-check-cli analyze
 ```
 
 ### Standalone Binaries
 
-Download pre-built binaries from the [releases page](https://github.com/your-org/deployment-risk-analyzer/releases):
+Download pre-built binaries from the [releases page](https://github.com/aryanyadav-dev/deploy-check-atlassian/releases):
 
 | Platform | Architecture | Binary |
 |----------|--------------|--------|
@@ -122,15 +125,27 @@ Generate a deployment runbook.
 
 ### `deploy-check jira`
 
+Integrate with Atlassian Jira to create and track issues for findings.
+
 - `jira auth` - Authenticate with Jira
-- `jira create` - Create issues (`--severity <level>`, `--project <key>`)
+- `jira auth --logout` - Remove stored credentials
+- `jira create --project <key>` - Create issues for findings
+- `jira create --severity high,critical` - Filter by severity
+- `jira create --dry-run` - Preview without creating
+- `jira link <finding-id> <issue-key>` - Link finding to existing issue
 - `jira status` - Check linked issue status
 
 ### `deploy-check confluence`
 
+Publish reports and runbooks to Atlassian Confluence.
+
 - `confluence auth` - Authenticate with Confluence
-- `confluence publish` - Publish report (`--space`, `--title`, `--runbook`)
-- `confluence list` - List published reports
+- `confluence auth --logout` - Remove stored credentials
+- `confluence publish --space <key>` - Publish report to space
+- `confluence publish --runbook` - Publish deployment runbook
+- `confluence publish --title "Custom Title"` - Set page title
+- `confluence publish --update <page-id>` - Update existing page
+- `confluence list --space <key>` - List published reports
 
 ## Configuration
 
@@ -151,8 +166,8 @@ Create `.deploy-check.json` or `.deploy-check.yaml` in your project root:
     "autoCreateSeverity": "critical"
   },
   "confluence": {
-    "instanceUrl": "https://your-org.atlassian.net/wiki",
-    "spaceKey": "DEPLOY",
+    "instanceUrl": "https://your-org.atlassian.net",
+    "spaceKey": "DEVOPS",
     "parentPageId": "123456"
   }
 }
@@ -198,7 +213,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
-      - run: npm install -g @dra/cli
+      - run: npm install -g deploy-check-cli
       - run: deploy-check analyze --base ${{ github.event.pull_request.base.sha }} --fail-on high
 ```
 
@@ -209,7 +224,7 @@ deploy-check:
   image: node:18
   stage: analyze
   script:
-    - npm install -g @dra/cli
+    - npm install -g deploy-check-cli
     - git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
     - deploy-check analyze --base origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --fail-on high
   rules:
@@ -221,13 +236,16 @@ deploy-check:
 ```bash
 npm install -D husky
 npx husky install
-npx husky add .husky/pre-commit "npx deploy-check analyze --fail-on high"
+npx husky add .husky/pre-commit "npx deploy-check-cli analyze --fail-on high"
 ```
 
-See `examples/` directory for complete CI configuration examples.
+See [CI Integration Guide](apps/cli/docs/CI_INTEGRATION_GUIDE.md) and [Jira & Confluence Guide](apps/cli/docs/JIRA_CONFLUENCE_GUIDE.md) for complete documentation.
 
 ## Requirements
 
 - Node.js >= 18.0.0
 - Git repository with history
 
+## License
+
+MIT
