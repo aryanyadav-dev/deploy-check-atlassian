@@ -4,7 +4,7 @@
   "description": "Deployment Risk Analyzer CLI - Analyze code changes for deployment risks",
   "private": false,
   "license": "MIT",
-  "author": "Deployment Risk Analyzer Team",
+  "author": "Aryan Yadav",
   "repository": {
     "type": "git",
     "url": "https://github.com/aryanyadav-dev/deploy-check-atlassian.git",
