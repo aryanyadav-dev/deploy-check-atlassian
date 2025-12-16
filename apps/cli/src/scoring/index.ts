@@ -7,14 +7,15 @@ import type { Finding } from '@dra/types';
 
 /**
  * Base scores for each finding type
+ * Reduced weights for less aggressive scoring
  * (Requirements 4.1)
  */
 const FINDING_SCORES: Record<string, number> = {
-  BREAKING_API: 40,
-  DESTRUCTIVE_MIGRATION: 50,
-  PERMISSION_CHANGE: 30,
-  LOW_COVERAGE: 20,
-  UNDOCUMENTED_API: 10,
+  BREAKING_API: 25,
+  DESTRUCTIVE_MIGRATION: 30,
+  PERMISSION_CHANGE: 20,
+  LOW_COVERAGE: 10,
+  UNDOCUMENTED_API: 5,
 };
 
 /**

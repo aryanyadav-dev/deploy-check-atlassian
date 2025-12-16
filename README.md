@@ -232,6 +232,36 @@ Create `.deploy-check.json` or `.deploy-check.yaml` in your project root:
 | `baseRef` | string | `main` | Default base reference |
 | `failOn` | string | `high` | Severity for non-zero exit |
 
+## Risk Scoring
+
+ShipGuard calculates a risk score (0-100) based on findings detected during analysis.
+
+### Finding Scores
+
+| Finding Type | Points | Description |
+|--------------|--------|-------------|
+| `DESTRUCTIVE_MIGRATION` | 30 | DROP TABLE, DROP COLUMN, etc. |
+| `BREAKING_API` | 25 | Removed endpoints, changed signatures |
+| `PERMISSION_CHANGE` | 20 | IAM/RBAC modifications |
+| `LOW_COVERAGE` | 10 | Test coverage below threshold |
+| `UNDOCUMENTED_API` | 5 | API endpoints without OpenAPI docs |
+
+### Risk Levels
+
+| Level | Score Range | Exit Code |
+|-------|-------------|-----------|
+| 🟢 LOW | 0-34 | 0 |
+| 🟡 MEDIUM | 35-59 | 1 |
+| 🟠 HIGH | 60-79 | 2 |
+| 🔴 CRITICAL | 80-100 | 2 |
+
+### Example Calculations
+
+- 1 `DESTRUCTIVE_MIGRATION` = 30 pts → MEDIUM
+- 2 `DESTRUCTIVE_MIGRATION` = 60 pts → HIGH
+- 3 `DESTRUCTIVE_MIGRATION` = 90 pts → CRITICAL
+- 1 `BREAKING_API` + 1 `PERMISSION_CHANGE` = 45 pts → MEDIUM
+
 ## Exit Codes
 
 | Code | Meaning |
