@@ -55,7 +55,8 @@ export interface JiraIssue {
 export interface JiraCreateIssueRequest {
   fields: {
     project: {
-      key: string;
+      key?: string;
+      id?: string;
     };
     summary: string;
     description: {

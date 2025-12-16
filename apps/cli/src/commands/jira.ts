@@ -263,6 +263,23 @@ jiraCommand
     }
 
     const client = new JiraClient(credentials);
+    
+    // Validate project exists and get project ID
+    let projectId: string;
+    try {
+      const project = await client.getProject(projectKey);
+      projectId = project.id;
+      console.log(chalk.gray(`Validated project: ${project.name} (${project.key})`));
+      console.log();
+    } catch (error) {
+      console.error(
+        chalk.red(`✗ Project "${projectKey}" not found or not accessible.`),
+        '\n',
+        chalk.yellow('Make sure the project key is correct and you have access to it.')
+      );
+      process.exit(1);
+    }
+    
     const createdIssues: Array<{ finding: CachedFinding; issueKey: string }> =
       [];
 
@@ -270,7 +287,7 @@ jiraCommand
       try {
         const result = await client.createIssue({
           fields: {
-            project: { key: projectKey },
+            project: { id: projectId },
             summary: `[Deploy Risk] ${finding.title}`,
             description: createIssueDescription(finding),
             issuetype: { name: 'Task' },

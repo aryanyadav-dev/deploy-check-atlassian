@@ -89,6 +89,13 @@ export class JiraClient {
   }
 
   /**
+   * Get project by key to validate it exists
+   */
+  async getProject(projectKey: string): Promise<{ id: string; key: string; name: string }> {
+    return this.request<{ id: string; key: string; name: string }>(`/project/${projectKey}`);
+  }
+
+  /**
    * Create a new issue
    */
   async createIssue(
@@ -101,7 +108,7 @@ export class JiraClient {
   }
 
   /**
-   * Get multiple issues by keys
+   * Get multiple issues by keys using the new /search/jql API
    */
   async getIssues(issueKeys: string[]): Promise<JiraIssue[]> {
     if (issueKeys.length === 0) {
@@ -110,7 +117,14 @@ export class JiraClient {
 
     const jql = `key in (${issueKeys.map((k) => `"${k}"`).join(',')})`;
     const response = await this.request<{ issues: JiraIssue[] }>(
-      `/search?jql=${encodeURIComponent(jql)}&fields=summary,description,status,assignee,updated,created,priority`
+      '/search/jql',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          jql,
+          fields: ['summary', 'description', 'status', 'assignee', 'updated', 'created', 'priority'],
+        }),
+      }
     );
 
     return response.issues;
