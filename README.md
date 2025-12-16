@@ -75,7 +75,7 @@ The Deployment Risk Analyzer is also available as an Atlassian Forge app, bringi
 
 Install the Forge app on your Atlassian Cloud site:
 
-**[Install Deployment Risk Analyzer](https://developer.atlassian.com/console/install/)**
+**[Install Deployment Risk Analyzer](https://developer.atlassian.com/console/install/6e6f43d6-6312-46e6-8a22-20ea3401c700)**
 
 > Note: After clicking the link, select your Atlassian site and confirm the installation.
 
