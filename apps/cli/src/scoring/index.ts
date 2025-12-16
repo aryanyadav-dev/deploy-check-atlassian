@@ -29,8 +29,9 @@ const RISK_THRESHOLDS = {
 
 /**
  * Calculate total risk score from findings
+ * Score is capped at 100 (maximum risk)
  * @param findings Array of findings
- * @returns Total risk score
+ * @returns Total risk score (0-100)
  */
 export function calculateRiskScore(findings: Finding[]): number {
   let score = 0;
@@ -40,7 +41,8 @@ export function calculateRiskScore(findings: Finding[]): number {
     score += baseScore;
   }
 
-  return score;
+  // Cap score at 100 (maximum risk)
+  return Math.min(score, 100);
 }
 
 /**

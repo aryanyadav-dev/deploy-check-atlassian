@@ -8,6 +8,7 @@ A command-line tool that analyzes code changes for deployment risks, including d
 ## Table of Contents
 
 - [Installation](#installation)
+- [Atlassian Forge App](#atlassian-forge-app)
 - [Quick Start](#quick-start)
 - [Commands](#commands)
 - [Configuration](#configuration)
@@ -58,6 +59,52 @@ Download pre-built binaries from the [releases page](https://github.com/aryanyad
 chmod +x deploy-check-*
 sudo mv deploy-check-* /usr/local/bin/deploy-check
 ```
+
+## Atlassian Forge App
+
+The Deployment Risk Analyzer is also available as an Atlassian Forge app, bringing deployment risk analysis directly into Jira and Confluence.
+
+### Features
+
+- **Jira Issue Panel**: View deployment risk analysis directly on Jira issues
+- **Confluence Reports**: Automatically publish risk reports to Confluence
+- **Rovo Agent**: AI-powered conversational agent for deployment risk assessment
+- **Risk Badges**: Visual indicators on Jira boards showing deployment risk levels
+
+### Installation
+
+Install the Forge app on your Atlassian Cloud site:
+
+**[Install Deployment Risk Analyzer](https://developer.atlassian.com/console/install/)**
+
+> Note: After clicking the link, select your Atlassian site and confirm the installation.
+
+### Rovo Agent Commands
+
+Once installed, you can interact with the Deployment Risk Analyzer agent in Jira or Confluence:
+
+```
+@Deployment Risk Analyzer analyze this PR
+@Deployment Risk Analyzer explain the breaking API change risk
+@Deployment Risk Analyzer suggest a fix for the migration issue
+@Deployment Risk Analyzer create an issue for this finding
+@Deployment Risk Analyzer publish a report to Confluence
+```
+
+### App Permissions
+
+The Forge app requires the following permissions:
+
+| Permission | Purpose |
+|------------|---------|
+| Read Jira | Access issue details and linked PRs |
+| Write Jira | Create issues for critical findings |
+| Read Confluence | Access pages for report updates |
+| Write Confluence | Publish deployment risk reports |
+| App Storage | Store configuration and cached results |
+| Read Bitbucket | Access PR details for analysis |
+
+For detailed deployment instructions, see [apps/forge/DEPLOYMENT.md](apps/forge/DEPLOYMENT.md).
 
 ## Quick Start
 
@@ -240,6 +287,22 @@ npx husky add .husky/pre-commit "npx deploy-check-cli analyze --fail-on high"
 ```
 
 See [CI Integration Guide](apps/cli/docs/CI_INTEGRATION_GUIDE.md) and [Jira & Confluence Guide](apps/cli/docs/JIRA_CONFLUENCE_GUIDE.md) for complete documentation.
+
+## Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| Language | TypeScript |
+| Monorepo | Turborepo, pnpm workspaces |
+| CLI Framework | Commander.js |
+| Backend | NestJS |
+| Database | Prisma ORM |
+| Queue | BullMQ, Redis |
+| Atlassian | Forge (UI Kit, Resolvers, Triggers) |
+| Testing | Jest, fast-check (property-based) |
+| Build | tsup, tsc |
+| CI/CD | GitHub Actions |
+| Linting | ESLint, Prettier |
 
 ## Requirements
 

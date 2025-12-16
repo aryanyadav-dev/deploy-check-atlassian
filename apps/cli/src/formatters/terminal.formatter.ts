@@ -35,14 +35,14 @@ const SEVERITY_ICONS = {
 } as const;
 
 /**
- * Finding type icons
+ * Finding type labels (no emojis per design requirement)
  */
-const FINDING_TYPE_ICONS: Record<string, string> = {
-  BREAKING_API: '⚡',
-  DESTRUCTIVE_MIGRATION: '💾',
-  PERMISSION_CHANGE: '🔐',
-  LOW_COVERAGE: '📊',
-  UNDOCUMENTED_API: '📝',
+const FINDING_TYPE_LABELS: Record<string, string> = {
+  BREAKING_API: '[API]',
+  DESTRUCTIVE_MIGRATION: '[DB]',
+  PERMISSION_CHANGE: '[PERM]',
+  LOW_COVERAGE: '[COV]',
+  UNDOCUMENTED_API: '[DOC]',
 };
 
 /**
@@ -90,15 +90,15 @@ export class TerminalFormatter {
     // Show linked issues summary if any
     const linkedFindings = findings.filter(f => f.jiraIssueKey);
     if (linkedFindings.length > 0) {
-      lines.push(chalk.dim(`📎 ${linkedFindings.length} finding(s) linked to Jira issues\n`));
+      lines.push(chalk.dim(`${linkedFindings.length} finding(s) linked to Jira issues\n`));
     }
 
     // Group findings by type
     const grouped = this.groupByType(findings);
 
     for (const [type, typeFindings] of grouped) {
-      const icon = FINDING_TYPE_ICONS[type] ?? '📋';
-      lines.push(chalk.bold.cyan(`\n${icon} ${type} (${typeFindings.length}):`));
+      const label = FINDING_TYPE_LABELS[type] ?? '[MISC]';
+      lines.push(chalk.bold.cyan(`\n${label} ${type} (${typeFindings.length}):`));
       lines.push(chalk.dim('─'.repeat(60)));
 
       for (const finding of typeFindings) {
@@ -125,7 +125,7 @@ export class TerminalFormatter {
       const location = finding.lineStart
         ? `${finding.filePath}:${finding.lineStart}${finding.lineEnd ? `-${finding.lineEnd}` : ''}`
         : finding.filePath;
-      lines.push(`     ${chalk.dim('📁')} ${chalk.cyan(location)}`);
+      lines.push(`     ${chalk.dim('File:')} ${chalk.cyan(location)}`);
     }
 
     // Linked Jira issue
@@ -133,7 +133,7 @@ export class TerminalFormatter {
       const issueLink = this.jiraInstanceUrl
         ? `${this.jiraInstanceUrl}/browse/${finding.jiraIssueKey}`
         : finding.jiraIssueKey;
-      lines.push(`     ${chalk.blue('🎫')} ${chalk.blue(finding.jiraIssueKey)} ${chalk.dim(this.jiraInstanceUrl ? `(${issueLink})` : '')}`);
+      lines.push(`     ${chalk.blue('Jira:')} ${chalk.blue(finding.jiraIssueKey)} ${chalk.dim(this.jiraInstanceUrl ? `(${issueLink})` : '')}`);
     }
 
     // Description (always show in verbose mode)
@@ -148,7 +148,7 @@ export class TerminalFormatter {
 
     // Remediation suggestion
     if (finding.remediation) {
-      lines.push(`     ${chalk.yellow('💡')} ${chalk.italic(finding.remediation)}`);
+      lines.push(`     ${chalk.yellow('Tip:')} ${chalk.italic(finding.remediation)}`);
     }
 
     lines.push('');
@@ -271,14 +271,14 @@ export class TerminalFormatter {
    * Format error message
    */
   formatError(message: string): string {
-    return chalk.red(`\n❌ Error: ${message}\n`);
+    return chalk.red(`\nError: ${message}\n`);
   }
 
   /**
    * Format success message
    */
   formatSuccess(message: string): string {
-    return chalk.green(`\n✅ ${message}\n`);
+    return chalk.green(`\n${message}\n`);
   }
 }
 

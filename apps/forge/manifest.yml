@@ -1,0 +1,86 @@
+modules:
+  # Jira Issue Panel - Displays deployment risk analysis
+  jira:issuePanel:
+    - key: deployment-risk-panel
+      title: Deployment Risk Analysis
+      function: analysisResolver
+      icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+
+  # Jira Project Settings Page - Configure deployment risk settings
+  jira:projectSettingsPage:
+    - key: deployment-risk-settings
+      title: Deployment Risk Settings
+      function: configResolver
+
+  # Confluence Content Action - Publish risk reports
+  confluence:contentAction:
+    - key: publish-risk-report
+      title: Publish Risk Report
+      function: reportResolver
+
+  # Function handlers
+  function:
+    - key: analysisResolver
+      handler: index.analysisResolver
+      providers:
+        auth:
+          - product
+
+    - key: configResolver
+      handler: index.configResolver
+      providers:
+        auth:
+          - product
+
+    - key: reportResolver
+      handler: index.reportResolver
+      providers:
+        auth:
+          - product
+
+    - key: analyzeDeploymentAction
+      handler: index.analyzeDeploymentAction
+
+    - key: explainRiskAction
+      handler: index.explainRiskAction
+
+    - key: getSolutionsAction
+      handler: index.getSolutionsAction
+
+    - key: suggestFixAction
+      handler: index.suggestFixAction
+
+    - key: createIssueAction
+      handler: index.createIssueAction
+
+    - key: publishReportAction
+      handler: index.publishReportAction
+
+    - key: prMergeTrigger
+      handler: index.prMergeTrigger
+
+  # Event triggers for automated analysis
+  trigger:
+    - key: pr-merge-trigger
+      function: prMergeTrigger
+      events:
+        - avi:bitbucket:merged:pullrequest
+
+  # Async event consumer for PR merge processing
+  consumer:
+    - key: pr-merge-consumer
+      queue: pr-merge-queue
+      function: prMergeTrigger
+
+app:
+  runtime:
+    name: nodejs20.x
+  id: ari:cloud:ecosystem::app/6e6f43d6-6312-46e6-8a22-20ea3401c700
+
+permissions:
+  scopes:
+    - read:jira-work
+    - write:jira-work
+    - read:page:confluence
+    - write:page:confluence
+    - storage:app

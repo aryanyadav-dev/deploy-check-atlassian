@@ -54,14 +54,14 @@ const SEVERITY_EMOJI: Record<string, string> = {
 };
 
 /**
- * Finding type emoji mapping
+ * Finding type labels (no emojis per design requirement)
  */
-const FINDING_TYPE_EMOJI: Record<string, string> = {
-  BREAKING_API: '⚡',
-  DESTRUCTIVE_MIGRATION: '💾',
-  PERMISSION_CHANGE: '🔐',
-  LOW_COVERAGE: '📊',
-  UNDOCUMENTED_API: '📝',
+const FINDING_TYPE_LABELS: Record<string, string> = {
+  BREAKING_API: '[API]',
+  DESTRUCTIVE_MIGRATION: '[DB]',
+  PERMISSION_CHANGE: '[PERM]',
+  LOW_COVERAGE: '[COV]',
+  UNDOCUMENTED_API: '[DOC]',
 };
 
 /**
@@ -247,8 +247,8 @@ export class MarkdownFormatter {
       lines.push('| Finding Type | Count | Score |');
       lines.push('|--------------|-------|-------|');
       for (const item of typeBreakdown) {
-        const tEmoji = FINDING_TYPE_EMOJI[item.type] ?? '📋';
-        lines.push(`| ${tEmoji} ${this.formatTypeName(item.type)} | ${item.count} | +${item.score} |`);
+        const label = FINDING_TYPE_LABELS[item.type] ?? '[MISC]';
+        lines.push(`| ${label} ${this.formatTypeName(item.type)} | ${item.count} | +${item.score} |`);
       }
       lines.push(`| **Total** | **${findings.length}** | **${riskScore}** |`);
       lines.push('');
@@ -288,10 +288,10 @@ export class MarkdownFormatter {
     const grouped = this.groupByType(findings);
 
     for (const [type, typeFindings] of Object.entries(grouped)) {
-      const tEmoji = FINDING_TYPE_EMOJI[type] ?? '📋';
+      const label = FINDING_TYPE_LABELS[type] ?? '[MISC]';
       const anchor = type.toLowerCase().replace(/_/g, '-');
 
-      lines.push(`### ${tEmoji} ${this.formatTypeName(type)} {#${anchor}}`);
+      lines.push(`### ${label} ${this.formatTypeName(type)} {#${anchor}}`);
       lines.push('');
       lines.push(`*${typeFindings.length} finding(s)*`);
       lines.push('');
@@ -330,7 +330,7 @@ export class MarkdownFormatter {
       const issueLink = this.jiraInstanceUrl
         ? `[${finding.jiraIssueKey}](${this.jiraInstanceUrl}/browse/${finding.jiraIssueKey})`
         : finding.jiraIssueKey;
-      lines.push(`**Jira Issue:** 🎫 ${issueLink}`);
+      lines.push(`**Jira Issue:** ${issueLink}`);
       lines.push('');
     }
 

@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./",
+    "jsx": "react",
+    "jsxFactory": "ForgeUI.createElement",
+    "jsxFragmentFactory": "ForgeUI.Fragment",
+    "paths": {
+      "@dra/types": ["../../libs/types/dist/index"],
+      "@dra/types/*": ["../../libs/types/dist/*"],
+      "@dra/backend/analyzers": ["../../apps/backend/dist/analyzers/index"],
+      "@dra/backend/scoring": ["../../apps/backend/dist/scoring/index"],
+      "@dra/backend/auth": ["../../apps/backend/dist/auth/index"],
+      "@dra/backend/security": ["../../apps/backend/dist/security/index"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "test"]
+}

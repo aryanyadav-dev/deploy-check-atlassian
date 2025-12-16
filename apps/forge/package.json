@@ -1,0 +1,44 @@
+{
+  "name": "@dra/forge",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "build:forge": "npx @forge/cli build",
+    "dev": "npx @forge/cli tunnel",
+    "deploy": "npx @forge/cli deploy",
+    "deploy:verbose": "npx @forge/cli deploy --verbose",
+    "deploy:staging": "npx @forge/cli deploy -e staging",
+    "deploy:production": "npx @forge/cli deploy -e production",
+    "install:app": "npx @forge/cli install",
+    "install:link": "npx @forge/cli install --upgrade",
+    "register": "npx @forge/cli register",
+    "login": "npx @forge/cli login",
+    "logs": "npx @forge/cli logs",
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint:manifest": "npx @forge/cli lint",
+    "test": "echo 'No tests configured'"
+  },
+  "dependencies": {
+    "@forge/api": "^4.0.0",
+    "@forge/resolver": "^1.6.0",
+    "@forge/ui": "^1.10.0",
+    "@dra/types": "workspace:*",
+    "@dra/backend": "workspace:*"
+  },
+  "devDependencies": {
+    "@forge/cli": "^10.0.0",
+    "@forge/bundler": "^4.0.0",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.18.0",
+    "@typescript-eslint/parser": "^6.18.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
