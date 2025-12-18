@@ -70,7 +70,8 @@ modules:
   consumer:
     - key: pr-merge-consumer
       queue: pr-merge-queue
-      function: prMergeTrigger
+      resolver:
+        function: prMergeTrigger
 
 app:
   runtime:
