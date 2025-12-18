@@ -40,6 +40,11 @@ export interface AnalysisRunnerOptions {
   head?: string;
 
   /**
+   * Analyze only staged changes
+   */
+  staged?: boolean;
+
+  /**
    * Glob pattern to limit analysis scope
    */
   files?: string;
@@ -153,6 +158,7 @@ export class AnalysisRunner {
     const contextOptions: ContextBuilderOptions = {
       base: options.base,
       head: options.head,
+      staged: options.staged,
       repoConfig,
     };
 

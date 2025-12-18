@@ -104,7 +104,7 @@ export class AnalysisContextBuilder {
     const diffResult = this.gitClient.getDiff(diffOptions);
 
     // Build file changes with content
-    const files = await this.buildFileChanges(diffResult, base, head);
+    const files = await this.buildFileChanges(diffResult, base, head, options.staged);
 
     // Build analysis context
     const context: AnalysisContext = {
@@ -126,7 +126,8 @@ export class AnalysisContextBuilder {
   private async buildFileChanges(
     diffResult: GitDiffResult,
     base: string,
-    head?: string
+    head?: string,
+    staged?: boolean
   ): Promise<FileChange[]> {
     const fileChanges: FileChange[] = [];
 
@@ -142,12 +143,17 @@ export class AnalysisContextBuilder {
         ? null
         : this.fileReader.readFromRef(oldPath, base);
 
-      // Get new content from head ref or working directory
-      const newContent = diffFile.status === 'deleted'
-        ? null
-        : head
-          ? this.fileReader.readFromRef(diffFile.path, head)
-          : this.fileReader.readFromWorkingDirectory(diffFile.path);
+      // Get new content from head ref, index (staged), or working directory
+      let newContent: string | null = null;
+      if (diffFile.status !== 'deleted') {
+        if (head) {
+          newContent = this.fileReader.readFromRef(diffFile.path, head);
+        } else if (staged) {
+          newContent = this.fileReader.readFromIndex(diffFile.path);
+        } else {
+          newContent = this.fileReader.readFromWorkingDirectory(diffFile.path);
+        }
+      }
 
       const fileChange: FileChange = {
         path: diffFile.path,

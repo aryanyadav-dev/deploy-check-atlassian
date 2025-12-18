@@ -25,6 +25,7 @@ import type { Finding } from '@dra/types';
 interface AnalyzeOptions {
   base?: string;
   head?: string;
+  staged?: boolean;
   files?: string;
   coverage?: string;
   openapi?: string;
@@ -36,6 +37,7 @@ export const analyzeCommand = new Command('analyze')
   .description('Analyze code changes for deployment risks')
   .option('--base <ref>', 'Base reference to compare against (default: main/master)')
   .option('--head <ref>', 'Head reference to analyze (default: HEAD)')
+  .option('--staged', 'Analyze only staged changes (for pre-commit hooks)')
   .option('--files <glob>', 'Glob pattern to limit analysis scope')
   .option('--coverage <path>', 'Path to lcov coverage report')
   .option('--openapi <path>', 'Path to OpenAPI specification file')
@@ -67,6 +69,7 @@ export const analyzeCommand = new Command('analyze')
       const result = await runAnalysis({
         base: options.base ?? config.baseRef,
         head: options.head,
+        staged: options.staged,
         files: options.files,
         coveragePath: options.coverage ?? config.coveragePath,
         openapiPath: options.openapi ?? config.openapiPath,
