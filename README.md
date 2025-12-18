@@ -1,6 +1,6 @@
 # deploy-check-cli - Deployment Risk Analyzer
 
-A command-line tool that analyzes code changes for deployment risks, including database migrations, breaking API changes, permission changes, and test coverage gaps. Integrates with Atlassian Jira and Confluence.
+A command-line tool that analyzes code changes for deployment risks, including database migrations, breaking API changes, permission changes, and test coverage gaps. Supports multiple programming languages and integrates with Atlassian Jira and Confluence.
 
 [![npm version](https://img.shields.io/npm/v/deploy-check-cli.svg)](https://www.npmjs.com/package/deploy-check-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -8,6 +8,7 @@ A command-line tool that analyzes code changes for deployment risks, including d
 ## Table of Contents
 
 - [Installation](#installation)
+- [Supported Languages](#supported-languages)
 - [Atlassian Forge App](#atlassian-forge-app)
 - [Quick Start](#quick-start)
 - [Commands](#commands)
@@ -59,6 +60,94 @@ Download pre-built binaries from the [releases page](https://github.com/aryanyad
 chmod +x deploy-check-*
 sudo mv deploy-check-* /usr/local/bin/deploy-check
 ```
+
+## Supported Languages
+
+The Deployment Risk Analyzer supports breaking API change detection for the following programming languages:
+
+| Language | File Extensions | Detection Capabilities |
+|----------|-----------------|------------------------|
+| TypeScript/JavaScript | `.ts`, `.tsx`, `.js`, `.jsx` | Exported functions, classes, interfaces |
+| Python | `.py` | Functions, classes, class methods |
+| Go | `.go` | Exported functions (capitalized), structs, struct fields |
+| Java | `.java` | Public methods, public classes, interfaces |
+| C/C++ | `.c`, `.cpp`, `.h`, `.hpp`, `.cc`, `.cxx` | Functions, structs, classes |
+| Swift | `.swift` | Public functions, classes, structs, protocols |
+| Rust | `.rs` | Public functions (`pub fn`), structs, enums, traits |
+
+### Language-Specific Examples
+
+#### Python
+
+```bash
+# Analyze Python files for breaking changes
+deploy-check analyze --files "**/*.py"
+```
+
+Detects:
+- Removed functions (`def function_name()`)
+- Changed function signatures (parameters added/removed/reordered)
+- Removed or modified class methods
+
+#### Go
+
+```bash
+# Analyze Go files for breaking changes
+deploy-check analyze --files "**/*.go"
+```
+
+Detects:
+- Removed exported functions (capitalized names like `func ProcessData()`)
+- Changed function signatures
+- Removed or type-changed struct fields
+
+#### Java
+
+```bash
+# Analyze Java files for breaking changes
+deploy-check analyze --files "**/*.java"
+```
+
+Detects:
+- Removed public methods
+- Changed method signatures
+- Removed public classes or interfaces
+
+#### C/C++
+
+```bash
+# Analyze C/C++ header files for breaking changes
+deploy-check analyze --files "**/*.h" --files "**/*.hpp"
+```
+
+Detects:
+- Removed function declarations
+- Changed function signatures
+- Modified struct or class definitions
+
+#### Swift
+
+```bash
+# Analyze Swift files for breaking changes
+deploy-check analyze --files "**/*.swift"
+```
+
+Detects:
+- Removed public functions
+- Changed function signatures
+- Removed or modified public classes, structs, or protocols
+
+#### Rust
+
+```bash
+# Analyze Rust files for breaking changes
+deploy-check analyze --files "**/*.rs"
+```
+
+Detects:
+- Removed public functions (`pub fn`)
+- Changed function signatures
+- Removed or modified public structs, enums, or traits
 
 ## Atlassian Forge App
 

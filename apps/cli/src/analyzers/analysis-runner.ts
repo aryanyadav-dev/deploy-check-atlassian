@@ -18,6 +18,12 @@ import { PermissionAnalyzerCli } from './permission.analyzer';
 import { CoverageAnalyzerCli } from './coverage.analyzer';
 import { OpenApiAnalyzerCli } from './openapi.analyzer';
 import { UndocumentedApiAnalyzerCli } from './undocumented-api.analyzer';
+import { PythonAnalyzerCli } from './python.analyzer';
+import { GoAnalyzerCli } from './go.analyzer';
+import { JavaAnalyzerCli } from './java.analyzer';
+import { CppAnalyzerCli } from './cpp.analyzer';
+import { SwiftAnalyzerCli } from './swift.analyzer';
+import { RustAnalyzerCli } from './rust.analyzer';
 
 /**
  * Options for running analysis
@@ -122,6 +128,12 @@ export class AnalysisRunner {
     this.registry.register(new CoverageAnalyzerCli());
     this.registry.register(new OpenApiAnalyzerCli());
     this.registry.register(new UndocumentedApiAnalyzerCli());
+    this.registry.register(new PythonAnalyzerCli());
+    this.registry.register(new GoAnalyzerCli());
+    this.registry.register(new JavaAnalyzerCli());
+    this.registry.register(new CppAnalyzerCli());
+    this.registry.register(new SwiftAnalyzerCli());
+    this.registry.register(new RustAnalyzerCli());
   }
 
   /**
