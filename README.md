@@ -5,6 +5,8 @@ A command-line tool that analyzes code changes for deployment risks, including d
 [![npm version](https://img.shields.io/npm/v/deploy-check-cli.svg)](https://www.npmjs.com/package/deploy-check-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+📚 **Documentation:** [Google Drive](https://drive.google.com/drive/folders/1bAd9QNvOacGY-hq025j_Uun0QJFQS0pI)
+
 ## Table of Contents
 
 - [Installation](#installation)
