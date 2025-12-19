@@ -435,6 +435,8 @@ confluenceCommand
   .command('list')
   .description('List previously published reports in a space')
   .requiredOption('-s, --space <key>', 'Confluence space key')
+  .option('-t, --title <pattern>', 'Filter pages by title pattern (case-insensitive)')
+  .option('-a, --all', 'List all pages without filtering')
   .option('-l, --limit <number>', 'Maximum number of pages to list', '10')
   .action(async (options) => {
     // Check for credentials
@@ -462,29 +464,39 @@ confluenceCommand
     console.log();
 
     try {
-      // Search for pages with "Deploy Risk" or "Deployment Runbook" in title
       const limit = parseInt(options.limit, 10) || 10;
       const pages = await client.searchPages(space.id, { limit });
 
-      // Filter for deploy-check related pages
-      const reportPages = pages.filter(
-        (p) =>
-          p.title.includes('Deploy Risk') ||
-          p.title.includes('Deployment Runbook') ||
-          p.title.includes('deploy-check')
-      );
+      let reportPages = pages;
+
+      // Apply filtering based on options
+      if (options.title) {
+        // Custom title filter (case-insensitive)
+        const pattern = options.title.toLowerCase();
+        reportPages = pages.filter((p) => p.title.toLowerCase().includes(pattern));
+      } else if (!options.all) {
+        // Default: filter for deploy-check related pages
+        reportPages = pages.filter(
+          (p) =>
+            p.title.includes('Deploy Risk') ||
+            p.title.includes('Deployment Runbook') ||
+            p.title.includes('deploy-check')
+        );
+      }
 
       if (reportPages.length === 0) {
-        console.log(chalk.yellow('No deploy-check reports found in this space.'));
-        console.log(
-          chalk.gray(
-            'Use `deploy-check confluence publish` to publish a report.'
-          )
-        );
+        if (options.title) {
+          console.log(chalk.yellow(`No pages found matching "${options.title}".`));
+        } else if (options.all) {
+          console.log(chalk.yellow('No pages found in this space.'));
+        } else {
+          console.log(chalk.yellow('No deploy-check reports found in this space.'));
+          console.log(chalk.gray('Use --title <pattern> to search for custom titles, or --all to list all pages.'));
+        }
         return;
       }
 
-      console.log(chalk.bold(`Found ${reportPages.length} report(s):`));
+      console.log(chalk.bold(`Found ${reportPages.length} page(s):`));
       console.log();
 
       for (const page of reportPages) {
