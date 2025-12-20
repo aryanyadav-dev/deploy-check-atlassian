@@ -11,9 +11,8 @@ A command-line tool that analyzes code changes for deployment risks, including d
 
 For comprehensive guides, architecture diagrams, and detailed documentation:
 
-#### **[View Full Documentation](https://drive.google.com/drive/folders/1bAd9QNvOacGY-hq025j_Uun0QJFQS0pI)**
-
-#### **[CLI Commands Reference](https://drive.google.com/file/d/1y72qnP4siK6Y8_EYAVYvLI4mt__nIUrq/view)**
+- **[View Full Documentation](https://drive.google.com/drive/folders/1bAd9QNvOacGY-hq025j_Uun0QJFQS0pI)**
+- **[CLI Commands Reference](https://drive.google.com/file/d/1y72qnP4siK6Y8_EYAVYvLI4mt__nIUrq/view)**
 
 ---
 
