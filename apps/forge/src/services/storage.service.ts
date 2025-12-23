@@ -3,8 +3,6 @@
  *
  * Handles Forge storage operations for configuration and caching.
  * Uses Forge storage API for persistent key-value storage.
- *
- * Requirements: 4.3, 4.4
  */
 
 import { storage } from '@forge/api';
@@ -204,8 +202,6 @@ export class StorageService implements IStorageService {
  * @param projectConfig - Partial project configuration
  * @param defaults - Default configuration values
  * @returns Merged configuration with all required fields
- *
- * Requirements: 4.4
  */
 export function mergeWithDefaults(
   projectConfig: Partial<ProjectConfig> | null | undefined,

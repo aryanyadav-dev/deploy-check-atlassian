@@ -2,8 +2,6 @@
  * Retry Utility
  *
  * Provides retry mechanism with exponential backoff for handling transient failures.
- *
- * Requirements: 3.4
  */
 
 /**

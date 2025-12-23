@@ -3,8 +3,6 @@
  *
  * Rovo agent action handler for solution requests.
  * Returns detailed solutions with steps, code fixes, and rollback procedures.
- *
- * Requirements: 2.2
  */
 
 import type { FindingType, Severity } from '@dra/types';
@@ -74,9 +72,6 @@ const storageService = new StorageService();
  *
  * Accepts finding ID or risk type as input and returns detailed solution
  * with steps, code fixes, and rollback procedures.
- *
- * Requirements: 2.2 - When a user asks about specific risk types,
- * the Rovo_Agent SHALL explain the risk and provide mitigation suggestions
  */
 export const getSolutionsAction = async (args: {
   payload: GetSolutionsInput;

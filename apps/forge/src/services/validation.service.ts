@@ -3,8 +3,6 @@
  *
  * Provides validation functions for ProjectConfig and its fields.
  * Returns structured validation errors for invalid inputs.
- *
- * Requirements: 4.2
  */
 
 import type { ProjectConfig } from '../types';
@@ -41,8 +39,6 @@ export interface ValidationResult {
  *
  * @param value - The threshold value to validate
  * @returns ValidationResult indicating if the value is valid
- *
- * Requirements: 4.2
  */
 export function validateThreshold(value: unknown): ValidationResult {
   const errors: ValidationError[] = [];
@@ -202,8 +198,6 @@ export function validateConfluenceSpaceKey(spaceKey: unknown): ValidationResult 
  *
  * @param config - The configuration object to validate
  * @returns ValidationResult with all validation errors
- *
- * Requirements: 4.2
  */
 export function validateConfig(config: unknown): ValidationResult {
   const errors: ValidationError[] = [];

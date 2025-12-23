@@ -3,8 +3,6 @@
  *
  * Handles Confluence API interactions for report publishing.
  * Formats findings to Atlassian Document Format (ADF) and publishes reports.
- *
- * Requirements: 3.2, 3.3, 3.4
  */
 
 import api, { route } from '@forge/api';
@@ -91,8 +89,6 @@ export interface IConfluenceService {
 
 /**
  * ConfluenceService handles formatting and publishing deployment risk reports.
- *
- * Requirements: 3.2, 3.3, 3.4
  */
 export class ConfluenceService implements IConfluenceService {
   private readonly storageService: StorageService;

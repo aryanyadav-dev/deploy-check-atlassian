@@ -3,8 +3,6 @@
  *
  * Handles Jira issue panel requests for deployment risk analysis.
  * Fetches linked repository from issue and triggers analysis.
- *
- * Requirements: 1.1, 1.2, 1.3
  */
 
 import Resolver from '@forge/resolver';
@@ -170,7 +168,6 @@ resolver.define('getAnalysis', async (args: ResolverRequest) => {
 
 /**
  * Trigger analysis for a Jira issue
- * Requirements: 1.1, 1.2, 1.3
  */
 resolver.define(
   'triggerAnalysis',

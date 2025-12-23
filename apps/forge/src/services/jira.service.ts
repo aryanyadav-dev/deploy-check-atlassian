@@ -3,8 +3,6 @@
  *
  * Handles Jira API interactions for issue creation.
  * Maps findings to Jira issues with proper priority, summary, and description.
- *
- * Requirements: 5.1, 5.2, 5.3
  */
 
 import api, { route } from '@forge/api';
@@ -99,8 +97,6 @@ export interface IJiraService {
 
 /**
  * JiraService handles Jira API interactions for issue creation.
- *
- * Requirements: 5.1, 5.2, 5.3
  */
 export class JiraService implements IJiraService {
   /**

@@ -3,8 +3,6 @@
  *
  * Rovo agent action handler for Confluence publishing.
  * Uses ConfluenceService to publish reports with solutions section.
- *
- * Requirements: 3.3
  */
 
 import { ConfluenceService } from '../../services/confluence.service';
@@ -50,9 +48,6 @@ const confluenceService = new ConfluenceService(storageService);
  * Publish report action handler
  *
  * Publishes a deployment risk report to Confluence with solutions section.
- *
- * Requirements: 3.3 - When publishing to Confluence, the Forge_App SHALL
- * create or update pages in the configured space
  */
 export const publishReportAction = async (args: {
   payload: PublishReportInput;

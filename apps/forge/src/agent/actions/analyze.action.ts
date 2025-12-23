@@ -3,8 +3,6 @@
  *
  * Rovo agent action handler for analysis requests.
  * Invokes AnalysisEngine with provided context and returns summarized results with solutions.
- *
- * Requirements: 2.3
  */
 
 import type { AnalysisContext } from '@dra/types';
@@ -84,9 +82,6 @@ const CACHE_TTL = 60 * 60 * 1000;
  *
  * Invokes the AnalysisEngine with the provided context and returns
  * summarized results with solutions for the Rovo agent to present.
- *
- * Requirements: 2.3 - When a user requests analysis of a PR or branch,
- * the Rovo_Agent SHALL invoke the analysis engine and summarize findings
  */
 export const analyzeDeploymentAction = async (args: {
   payload: AnalyzeDeploymentInput;

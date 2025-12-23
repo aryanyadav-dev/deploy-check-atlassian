@@ -3,8 +3,6 @@
  *
  * Wraps the shared risk-score calculator from the backend package
  * for use in the Forge runtime.
- *
- * Requirements: 8.3
  */
 
 import type { Finding, FindingType, RiskLevel } from '@dra/types';
@@ -42,9 +40,6 @@ export interface RiskScoreBreakdown {
  * Property 13: Risk Score Calculation Consistency
  * For any set of findings, the Forge app's risk score calculation SHALL produce
  * the same score as the shared risk-score calculator from the backend package.
- *
- * Requirements: 8.3
- * **Validates: Requirements 8.3**
  */
 export function calculateRiskScore(findings: Finding[]): number {
   return findings.reduce((score, finding) => {
@@ -56,8 +51,6 @@ export function calculateRiskScore(findings: Finding[]): number {
  * Classify risk level based on score.
  * CRITICAL if score >= 80, HIGH if 60 <= score < 80,
  * MEDIUM if 35 <= score < 60, LOW if score < 35
- *
- * Requirements: 8.3
  */
 export function classifyRiskLevel(score: number): RiskLevel {
   if (score >= 80) return 'CRITICAL';
@@ -69,8 +62,6 @@ export function classifyRiskLevel(score: number): RiskLevel {
 /**
  * Calculate risk score with detailed breakdown.
  * Returns the total score, risk level, and breakdown by finding type.
- *
- * Requirements: 8.3
  */
 export function calculateRiskScoreWithBreakdown(findings: Finding[]): RiskScoreBreakdown {
   // Count findings by type
@@ -109,8 +100,6 @@ export function calculateRiskScoreWithBreakdown(findings: Finding[]): RiskScoreB
  * RiskScoreCalculator class wrapper for Forge context.
  * Provides a class-based interface for risk score calculations
  * that can be used with Forge's dependency injection patterns.
- *
- * Requirements: 8.3
  */
 export class RiskScoreCalculator {
   /**

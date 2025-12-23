@@ -3,8 +3,6 @@
  *
  * Contains the system prompt and knowledge context for the AI agent.
  * Emphasizes deployment risk solutions and mitigation strategies.
- *
- * Requirements: 2.1
  */
 
 /**

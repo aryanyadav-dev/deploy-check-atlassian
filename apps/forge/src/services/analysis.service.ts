@@ -3,8 +3,6 @@
  *
  * Wraps backend analyzers for Forge runtime.
  * Provides analysis engine that integrates with shared analyzer implementations.
- *
- * Requirements: 8.1, 8.4
  */
 
 import type { Finding, AnalysisContext, Analyzer, Severity } from '@dra/types';
@@ -36,8 +34,6 @@ const resultCache = new Map<string, AnalysisResult>();
 /**
  * AnalysisEngine wraps backend analyzers for Forge runtime.
  * Handles analyzer errors gracefully by catching and continuing with other analyzers.
- *
- * Requirements: 8.1, 8.4
  */
 export class AnalysisEngine implements IAnalysisEngine {
   private readonly analyzers: Analyzer[] = [];
@@ -74,8 +70,6 @@ export class AnalysisEngine implements IAnalysisEngine {
   /**
    * Run analysis on the given context using all registered analyzers.
    * Handles analyzer errors gracefully - catches errors and continues with other analyzers.
-   *
-   * Requirements: 8.1, 8.4
    */
   async analyze(context: AnalysisContext): Promise<AnalysisResult> {
     // Clear previous errors

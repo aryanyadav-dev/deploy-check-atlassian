@@ -3,8 +3,6 @@
  *
  * Shared type definitions for the Forge application including
  * storage models, serialization interfaces, and solution types.
- *
- * Requirements: 7.1, 7.2
  */
 
 import type { Finding, Severity, FindingType } from '@dra/types';

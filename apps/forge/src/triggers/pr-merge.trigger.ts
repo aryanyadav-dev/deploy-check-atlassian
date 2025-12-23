@@ -3,8 +3,6 @@
  *
  * Listens for PR merge events and triggers analysis.
  * Publishes report to Confluence if configured.
- *
- * Requirements: 3.1
  */
 
 import { AnalysisEngine } from '../services/analysis.service';
@@ -120,8 +118,6 @@ async function buildAnalysisContext(
  *
  * Triggered when a PR is merged in Bitbucket.
  * Runs deployment risk analysis and optionally publishes to Confluence.
- *
- * Requirements: 3.1 - Generate deployment risk report on PR merge
  *
  * @param event - The PR merge event from Bitbucket
  * @returns Result of the trigger execution

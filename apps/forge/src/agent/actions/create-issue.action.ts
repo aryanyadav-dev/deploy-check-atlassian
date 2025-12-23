@@ -3,8 +3,6 @@
  *
  * Rovo agent action handler for Jira issue creation.
  * Uses JiraService to create issues with solution recommendations.
- *
- * Requirements: 5.1
  */
 
 import type { Finding } from '@dra/types';
@@ -55,9 +53,6 @@ const storageService = new StorageService();
  * Create issue action handler
  *
  * Creates a Jira issue from a finding with solution recommendations included.
- *
- * Requirements: 5.1 - When a user requests issue creation through the Rovo_Agent,
- * the Rovo_Agent SHALL create a Jira issue with finding details
  */
 export const createIssueAction = async (args: {
   payload: CreateIssueInput;

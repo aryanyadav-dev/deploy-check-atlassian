@@ -3,8 +3,6 @@
  *
  * Rovo agent action handler for risk explanations.
  * Provides context-aware explanations with recommended solutions and mitigation steps.
- *
- * Requirements: 2.2
  */
 
 import type { FindingType, Severity } from '@dra/types';

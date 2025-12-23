@@ -3,8 +3,6 @@
  *
  * Provides solution recommendations for deployment risk findings.
  * Maps risk types to mitigation strategies, code fixes, and rollback procedures.
- *
- * Requirements: 2.2
  */
 
 import type { Finding, Severity } from '@dra/types';

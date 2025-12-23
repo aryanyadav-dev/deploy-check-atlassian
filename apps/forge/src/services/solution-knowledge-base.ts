@@ -3,8 +3,6 @@
  *
  * Contains best practices, mitigation strategies, and solution templates
  * for each finding type. This knowledge base powers the SolutionService.
- *
- * Requirements: 2.2
  */
 
 import type { FindingType } from '@dra/types';

@@ -3,8 +3,6 @@
  *
  * Handles Confluence content action requests for report generation and publishing.
  * Generates and publishes reports with solutions.
- *
- * Requirements: 3.1, 3.3
  */
 
 import Resolver from '@forge/resolver';

@@ -3,8 +3,6 @@
  *
  * Functions for serializing and deserializing analysis results
  * to/from JSON format for Forge storage.
- *
- * Requirements: 7.1, 7.2, 7.3
  */
 
 import type { Finding } from '@dra/types';

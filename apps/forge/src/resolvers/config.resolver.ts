@@ -3,8 +3,6 @@
  *
  * Handles project settings panel requests for configuration management.
  * Loads and saves configuration via StorageService.
- *
- * Requirements: 4.1, 4.2, 4.3
  */
 
 import Resolver from '@forge/resolver';
@@ -97,7 +95,6 @@ resolver.define(
 
 /**
  * Save configuration for a project
- * Requirements: 4.2, 4.3
  */
 resolver.define(
   'saveConfig',

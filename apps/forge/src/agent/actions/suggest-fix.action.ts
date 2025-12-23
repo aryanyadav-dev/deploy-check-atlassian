@@ -3,8 +3,6 @@
  *
  * Rovo agent action handler for code fix suggestions.
  * Generates specific code changes to resolve findings with before/after snippets.
- *
- * Requirements: 2.2
  */
 
 import type { FindingType, Finding } from '@dra/types';
@@ -72,8 +70,6 @@ const storageService = new StorageService();
  *
  * Generates specific code changes to resolve identified findings,
  * including before/after code snippets and test suggestions.
- *
- * Requirements: 2.2 - Provide mitigation suggestions including code fixes
  */
 export const suggestFixAction = async (args: {
   payload: SuggestFixInput;
