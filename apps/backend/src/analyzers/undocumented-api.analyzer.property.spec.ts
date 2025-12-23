@@ -9,7 +9,6 @@ import type { AnalysisContext } from '@dra/types';
 describe('Undocumented API Change Detection Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 14: Undocumented API Change Detection**
-   * **Validates: Requirements 10.2**
    *
    * For any PR diff where route handler files are modified but no OpenAPI specification
    * file is changed, the analyzer should produce a Finding of type UNDOCUMENTED_API.

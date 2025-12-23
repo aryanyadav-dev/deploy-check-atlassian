@@ -4,7 +4,6 @@ import { EncryptionService } from './encryption.service';
 /**
  * Property test for Token Encryption Round-Trip
  * **Feature: deployment-risk-analyzer, Property 8: Token Encryption Round-Trip**
- * **Validates: Requirements 8.5**
  *
  * For any OAuth token string, encrypting with KMS and decrypting should produce
  * the original token string.

@@ -1,7 +1,6 @@
 /**
  * Runbook command for deploy-check CLI
  * Generates deployment runbooks for current changes
- * Requirements: 5.1, 5.2, 5.3, 5.4
  */
 
 import { Command } from 'commander';
@@ -170,8 +169,6 @@ interface RunbookGenerationOptions {
  * Property 20: Runbook Migration Commands
  * For any analysis containing DESTRUCTIVE_MIGRATION findings, the generated runbook
  * should include migration up commands, migration down commands, and data loss warnings.
- * 
- * **Validates: Requirements 5.1, 5.2, 5.4**
  */
 function generateRunbook(
   prTitle: string,
@@ -300,8 +297,6 @@ function generatePostDeployVerification(findings: Finding[], options: RunbookGen
  * Property 20: Runbook Migration Commands
  * For any analysis containing DESTRUCTIVE_MIGRATION findings, the generated runbook
  * should include migration up commands, migration down commands, and data loss warnings.
- * 
- * **Validates: Requirements 5.2, 5.4**
  */
 function generateRollbackPlan(findings: Finding[], options: RunbookGenerationOptions): string[] {
   const rollbackSteps: string[] = [
@@ -346,8 +341,6 @@ function generateRollbackPlan(findings: Finding[], options: RunbookGenerationOpt
  * Property 4: Runbook Markdown Round-Trip
  * For any generated runbook, parsing the markdown structure and re-serializing
  * should preserve all sections and their content.
- * 
- * **Validates: Requirements 5.6**
  */
 function serializeRunbookToMarkdown(runbook: Runbook): string {
   const lines: string[] = [];
@@ -397,8 +390,6 @@ function serializeRunbookToMarkdown(runbook: Runbook): string {
  * Apply a custom template to the runbook data.
  * Supports placeholders like {{prTitle}}, {{riskLevel}}, {{riskScore}},
  * {{preDeploy}}, {{deploy}}, {{postDeploy}}, {{rollback}}
- * 
- * Requirements: 5.3
  */
 function applyCustomTemplate(template: string, runbook: Runbook): string {
   let result = template;

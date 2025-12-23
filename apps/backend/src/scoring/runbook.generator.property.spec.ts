@@ -57,7 +57,6 @@ const prTitleArb = fc
 describe('Runbook Required Sections Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 19: Runbook Required Sections**
-   * **Validates: Requirements 5.1**
    *
    * For any completed analysis, the generated runbook should contain non-empty
    * sections for: pre-deploy checks, deploy steps, post-deploy verification, and rollback plan.
@@ -121,7 +120,6 @@ describe('Runbook Required Sections Property', () => {
 describe('Runbook Migration Commands Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 20: Runbook Migration Commands**
-   * **Validates: Requirements 5.2, 5.4**
    *
    * For any analysis containing DESTRUCTIVE_MIGRATION findings, the generated runbook
    * should include migration up commands, migration down commands, and data loss warnings.
@@ -204,7 +202,6 @@ describe('Runbook Migration Commands Property', () => {
 describe('Runbook Markdown Round-Trip Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 4: Runbook Markdown Round-Trip**
-   * **Validates: Requirements 5.6**
    *
    * For any generated runbook containing pre-deploy, deploy, post-deploy, and rollback sections,
    * parsing the markdown structure and re-serializing should preserve all sections and their content.

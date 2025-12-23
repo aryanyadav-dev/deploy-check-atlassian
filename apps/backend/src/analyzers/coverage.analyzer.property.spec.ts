@@ -9,7 +9,6 @@ import type { CoverageReport, FileCoverage, AnalysisContext } from '@dra/types';
 describe('LCOV Parsing Completeness Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 17: LCOV Parsing Completeness**
-   * **Validates: Requirements 3.1, 3.4**
    *
    * For any valid lcov format coverage report, parsing should extract line coverage
    * percentage, branch coverage percentage, and function coverage percentage for each file entry.
@@ -191,7 +190,6 @@ end_of_record`;
 describe('Coverage Threshold Detection Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 18: Coverage Threshold Detection**
-   * **Validates: Requirements 3.2**
    *
    * For any modified file with coverage percentage below the configured threshold,
    * the coverage analyzer should produce a Finding of type LOW_COVERAGE with severity MEDIUM.
@@ -340,7 +338,6 @@ describe('Coverage Threshold Detection Property', () => {
 describe('Coverage Data Serialization Round-Trip Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 2: Coverage Data Serialization Round-Trip**
-   * **Validates: Requirements 3.5**
    *
    * For any valid coverage data structure containing line, branch, and function coverage metrics,
    * serializing to JSON and deserializing should produce an equivalent data structure.

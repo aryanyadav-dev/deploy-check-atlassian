@@ -9,7 +9,6 @@ import type { OpenApiSpec, OpenApiPathItem, AnalysisContext } from '@dra/types';
 describe('OpenAPI Breaking Change Detection Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 13: OpenAPI Breaking Change Detection**
-   * **Validates: Requirements 10.1, 10.3**
    *
    * For any pair of OpenAPI specifications where endpoints are removed or required
    * parameters are added, the OpenAPI analyzer should produce a Finding with severity HIGH.
@@ -222,7 +221,6 @@ describe('OpenAPI Breaking Change Detection Property', () => {
 describe('OpenAPI Specification Round-Trip Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 6: OpenAPI Specification Round-Trip**
-   * **Validates: Requirements 10.4**
    *
    * For any valid OpenAPI 3.x specification, parsing and re-serializing to JSON
    * should produce a semantically equivalent specification.

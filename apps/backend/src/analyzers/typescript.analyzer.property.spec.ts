@@ -5,7 +5,6 @@ import { TypeScriptAnalyzer } from './typescript.analyzer';
 /**
  * Property test for TypeScript AST Round-Trip
  * **Feature: deployment-risk-analyzer, Property 1: TypeScript AST Round-Trip**
- * **Validates: Requirements 2.7**
  *
  * For any valid JavaScript or TypeScript source code, parsing it into an AST
  * and printing it back should produce semantically equivalent source code
@@ -200,7 +199,6 @@ describe('TypeScript AST Round-Trip Property', () => {
 /**
  * Property test for Exported Function Signature Change Detection
  * **Feature: deployment-risk-analyzer, Property 9: Exported Function Signature Change Detection**
- * **Validates: Requirements 2.2**
  *
  * For any TypeScript/JavaScript diff where an exported function's parameter types,
  * return type, or parameter count changes, the TypeScript analyzer should produce

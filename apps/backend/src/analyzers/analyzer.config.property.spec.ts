@@ -4,7 +4,6 @@ import type { AnalyzerConfig } from '@dra/types';
 /**
  * Property test for Analyzer Configuration Round-Trip
  * **Feature: deployment-risk-analyzer, Property 7: Analyzer Configuration Round-Trip**
- * **Validates: Requirements 12.4**
  *
  * For any analyzer configuration containing language settings, thresholds, and ignore patterns,
  * serializing to JSON and deserializing should produce an equivalent configuration.

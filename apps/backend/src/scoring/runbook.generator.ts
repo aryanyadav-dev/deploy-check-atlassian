@@ -34,8 +34,6 @@ export const RUNBOOK_SECTIONS = {
  * Property 20: Runbook Migration Commands
  * For any analysis containing DESTRUCTIVE_MIGRATION findings, the generated runbook
  * should include migration up commands, migration down commands, and data loss warnings.
- * 
- * **Validates: Requirements 5.1, 5.2, 5.4**
  */
 export function generateRunbook(prTitle: string, findings: Finding[]): Runbook {
   const { totalScore, riskLevel } = calculateRiskScoreWithBreakdown(findings);
@@ -144,8 +142,6 @@ function generatePostDeployVerification(findings: Finding[]): string[] {
  * Property 20: Runbook Migration Commands
  * For any analysis containing DESTRUCTIVE_MIGRATION findings, the generated runbook
  * should include migration up commands, migration down commands, and data loss warnings.
- * 
- * **Validates: Requirements 5.2, 5.4**
  */
 function generateRollbackPlan(findings: Finding[]): string[] {
   const rollbackSteps: string[] = [
@@ -181,8 +177,6 @@ function generateRollbackPlan(findings: Finding[]): string[] {
  * Property 4: Runbook Markdown Round-Trip
  * For any generated runbook, parsing the markdown structure and re-serializing
  * should preserve all sections and their content.
- * 
- * **Validates: Requirements 5.6**
  */
 export function serializeRunbookToMarkdown(runbook: Runbook): string {
   const lines: string[] = [];

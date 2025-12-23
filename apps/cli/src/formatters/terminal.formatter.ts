@@ -1,7 +1,6 @@
 /**
  * Terminal Output Formatter
  * Displays findings with colored severity indicators and visual elements
- * Requirements: 7.2, 7.3
  */
 
 import chalk from 'chalk';

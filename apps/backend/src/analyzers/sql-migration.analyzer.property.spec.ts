@@ -8,7 +8,6 @@ import { SqlMigrationAnalyzer } from './sql-migration.analyzer';
 describe('Migration Path Pattern Matching Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 10: Migration Path Pattern Matching**
-   * **Validates: Requirements 2.3**
    *
    * For any file path, if the path matches `migrations/*` or `db/migrate/*` pattern,
    * the SQL analyzer should be invoked for that file.
@@ -102,7 +101,6 @@ describe('Migration Path Pattern Matching Property', () => {
 describe('Destructive SQL Operation Detection Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 11: Destructive SQL Operation Detection**
-   * **Validates: Requirements 2.4**
    *
    * For any SQL content containing DROP TABLE, DROP COLUMN, or ALTER TYPE statements,
    * the SQL analyzer should produce a Finding with severity HIGH or CRITICAL.

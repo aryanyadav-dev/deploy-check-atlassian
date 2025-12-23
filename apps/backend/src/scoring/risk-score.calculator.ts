@@ -33,8 +33,6 @@ export interface RiskScoreBreakdown {
  * (count of BREAKING_API × 40) + (count of DESTRUCTIVE_MIGRATION × 50) +
  * (count of PERMISSION_CHANGE × 30) + (count of LOW_COVERAGE × 20) +
  * (count of UNDOCUMENTED_API × 10)
- * 
- * **Validates: Requirements 4.1**
  */
 export function calculateRiskScore(findings: Finding[]): number {
   return findings.reduce((score, finding) => {
@@ -48,8 +46,6 @@ export function calculateRiskScore(findings: Finding[]): number {
  * Property 16: Risk Severity Classification
  * CRITICAL if score ≥ 80, HIGH if 60 ≤ score < 80,
  * MEDIUM if 35 ≤ score < 60, LOW if score < 35
- * 
- * **Validates: Requirements 4.2, 4.3, 4.4, 4.5**
  */
 export function classifyRiskLevel(score: number): RiskLevel {
   if (score >= 80) return 'CRITICAL';
@@ -101,8 +97,6 @@ export function calculateRiskScoreWithBreakdown(findings: Finding[]): RiskScoreB
  * Property 3: Risk Score Serialization Round-Trip
  * For any risk score calculation result, serializing to JSON and
  * deserializing should produce an equivalent score breakdown.
- * 
- * **Validates: Requirements 4.6**
  */
 export function serializeRiskScoreBreakdown(breakdown: RiskScoreBreakdown): string {
   return JSON.stringify(breakdown);

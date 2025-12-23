@@ -1,7 +1,6 @@
 /**
  * Markdown Report Formatter
  * Generates markdown reports with summary, findings by category, and runbook
- * Requirements: 5.5, 5.6
  */
 
 import type { Finding, RiskLevel } from '@dra/types';
@@ -38,7 +37,7 @@ export interface MarkdownFormatterOptions {
   includeCodeSnippets?: boolean;
 
   /**
-   * Custom template path (for future use)
+   * Custom template path
    */
   templatePath?: string;
 }

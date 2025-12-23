@@ -8,7 +8,6 @@ import type { AnalysisContext, FileChange, Finding } from '@dra/types';
 /**
  * Property test for Unsupported File Graceful Handling
  * **Feature: deployment-risk-analyzer, Property 28: Unsupported File Graceful Handling**
- * **Validates: Requirements 12.2**
  *
  * For any repository containing files with unsupported language extensions,
  * analysis should complete successfully, skipping those files and including

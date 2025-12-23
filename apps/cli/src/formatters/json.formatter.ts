@@ -1,7 +1,6 @@
 /**
  * JSON Output Formatter
  * Outputs structured JSON for piping to other tools (jq, etc.)
- * Requirements: 4.6, 9.5
  */
 
 import type { Finding, RiskLevel } from '@dra/types';

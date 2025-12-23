@@ -4,7 +4,6 @@ import { SanitizerService } from './sanitizer.service';
 /**
  * Property test for XSS Sanitization
  * **Feature: deployment-risk-analyzer, Property 22: XSS Sanitization**
- * **Validates: Requirements 11.3**
  *
  * For any user-generated content string containing HTML tags or JavaScript,
  * sanitization should remove or escape all potentially dangerous elements

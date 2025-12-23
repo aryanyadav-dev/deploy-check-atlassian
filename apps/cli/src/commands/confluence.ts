@@ -303,7 +303,6 @@ function generateReportContent(
 
 /**
  * Generate runbook content in Confluence storage format with collapsible sections
- * Requirements: 5.1, 5.5
  */
 function generateRunbookStorageContent(
   cache: ReturnType<typeof analysisCacheStore.load>

@@ -47,7 +47,6 @@ const findingsArb = fc.array(findingArb, { minLength: 0, maxLength: 20 });
 describe('Risk Score Calculation Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 15: Risk Score Calculation**
-   * **Validates: Requirements 4.1**
    *
    * For any set of findings, the risk score should equal the sum of:
    * (count of BREAKING_API × 40) + (count of DESTRUCTIVE_MIGRATION × 50) +
@@ -159,7 +158,6 @@ describe('Risk Score Calculation Property', () => {
 describe('Risk Severity Classification Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 16: Risk Severity Classification**
-   * **Validates: Requirements 4.2, 4.3, 4.4, 4.5**
    *
    * For any risk score value, the severity classification should be:
    * CRITICAL if score ≥ 80, HIGH if 60 ≤ score < 80,
@@ -237,7 +235,6 @@ describe('Risk Severity Classification Property', () => {
 describe('Risk Score Serialization Round-Trip Property', () => {
   /**
    * **Feature: deployment-risk-analyzer, Property 3: Risk Score Serialization Round-Trip**
-   * **Validates: Requirements 4.6**
    *
    * For any risk score calculation result containing score breakdown by finding type,
    * serializing to JSON and deserializing should produce an equivalent score breakdown.

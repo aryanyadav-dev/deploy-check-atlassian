@@ -4,7 +4,6 @@ import { PermissionAnalyzer } from './permission.analyzer';
 /**
  * Property test for Permission Pattern Detection
  * **Feature: deployment-risk-analyzer, Property 12: Permission Pattern Detection**
- * **Validates: Requirements 2.5**
  *
  * For any code diff containing patterns like `hasPermission`, `isAdmin`, `role ===`,
  * or `req.user.roles`, the permission analyzer should produce a Finding of type PERMISSION_CHANGE.

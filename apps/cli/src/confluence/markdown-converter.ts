@@ -1,7 +1,6 @@
 /**
  * Markdown to Confluence Storage Format Converter
  * Converts markdown content to Confluence's XHTML-based storage format
- * Requirements: 5.1, 5.5
  */
 
 /**
