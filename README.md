@@ -7,6 +7,74 @@ A command-line tool that analyzes code changes for deployment risks, including d
 
 ---
 
+## How It Works
+
+> **A 3-layer deployment risk analyzer that catches issues before they reach production**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           DEPLOYMENT RISK ANALYZER                              │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │  LAYER 1: CLI (deploy-check-cli)                                        │   │
+│  │  ─────────────────────────────────────────────────────────────────────  │   │
+│  │                                                                         │   │
+│  │  $ npm install -g deploy-check-cli                                      │   │
+│  │  $ deploy-check analyze                                                 │   │
+│  │                                                                         │   │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌────────────┐  │   │
+│  │  │  TypeScript  │  │    Python    │  │     Go       │  │    Java    │  │   │
+│  │  │   Analyzer   │  │   Analyzer   │  │   Analyzer   │  │  Analyzer  │  │   │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘  └────────────┘  │   │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                  │   │
+│  │  │    C/C++     │  │    Swift     │  │     Rust     │  <- AST-based   │   │
+│  │  │   Analyzer   │  │   Analyzer   │  │   Analyzer   │     detection   │   │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘                  │   │
+│  │                              │                                          │   │
+│  │                              v                                          │   │
+│  │                    ┌──────────────────┐                                 │   │
+│  │                    │   Risk Scoring   │ <- Calculates 0-100 score      │   │
+│  │                    │     Engine       │                                 │   │
+│  │                    └──────────────────┘                                 │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                      │                                          │
+│                                      v                                          │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │  LAYER 2: FORGE BACKEND                                                 │   │
+│  │  ─────────────────────────────────────────────────────────────────────  │   │
+│  │                                                                         │   │
+│  │  ┌──────────────────┐    ┌──────────────────┐    ┌─────────────────┐   │   │
+│  │  │  Forge Resolvers │--->│  Rovo AI Agent   │--->│  Risk Validator │   │   │
+│  │  │  (UI Kit panels) │    │  (6 actions)     │    │  & Scorer       │   │   │
+│  │  └──────────────────┘    └──────────────────┘    └─────────────────┘   │   │
+│  │                                                                         │   │
+│  │  Rovo Agent Actions:                                                    │   │
+│  │  - analyze        : Run deployment risk analysis                        │   │
+│  │  - explain-risk   : AI explanation of findings                          │   │
+│  │  - suggest-fix    : Generate code fixes                                 │   │
+│  │  - get-solutions  : Retrieve remediation steps                          │   │
+│  │  - create-issue   : Create Jira issues                                  │   │
+│  │  - publish-report : Publish to Confluence                               │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                          │                              │                       │
+│                          v                              v                       │
+│  ┌────────────────────────────────┐    ┌────────────────────────────────────┐  │
+│  │  LAYER 3A: JIRA                │    │  LAYER 3B: CONFLUENCE              │  │
+│  │  ────────────────────────────  │    │  ──────────────────────────────    │  │
+│  │                                │    │                                    │  │
+│  │  - Auto-create issues for      │    │  - Full risk analysis reports      │  │
+│  │    critical findings           │    │  - Deployment runbooks             │  │
+│  │  - Risk badges on issues       │    │  - Historical tracking             │  │
+│  │  - Severity-based priority     │    │  - Team collaboration              │  │
+│  │                                │    │                                    │  │
+│  └────────────────────────────────┘    └────────────────────────────────────┘  │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## Documentation
 
 For comprehensive guides, architecture diagrams, and detailed documentation:
