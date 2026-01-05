@@ -505,4 +505,8 @@ See [CI Integration Guide](apps/cli/docs/CI_INTEGRATION_GUIDE.md) and [Jira & Co
 
 ## License
 
-MIT
+MIT License
+
+Copyright (c) 2025 Aryan Yadav
+
+See [LICENSE](LICENSE) for details.

@@ -190,4 +190,6 @@ npx husky add .husky/pre-commit "npx deploy-check-cli analyze --fail-on high"
 
 ## License
 
-MIT
+MIT License
+
+Copyright (c) 2025 Aryan Yadav
