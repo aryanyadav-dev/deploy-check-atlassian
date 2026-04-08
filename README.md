@@ -3,7 +3,7 @@
 A command-line tool that analyzes code changes for deployment risks, including database migrations, breaking API changes, permission changes, and test coverage gaps. Supports multiple programming languages and integrates with Atlassian Jira and Confluence.
 
 [![npm version](https://img.shields.io/npm/v/deploy-check-cli.svg)](https://www.npmjs.com/package/deploy-check-cli)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 ---
 
@@ -505,8 +505,22 @@ See [CI Integration Guide](apps/cli/docs/CI_INTEGRATION_GUIDE.md) and [Jira & Co
 
 ## License
 
-MIT License
+GNU Affero General Public License v3.0
 
-Copyright (c) 2025 Aryan Yadav
+Copyright (C) 2025 Aryan Yadav
 
-See [LICENSE](LICENSE) for details.
+This software is licensed under the **AGPL-3.0** license, which requires:
+- Source code availability for any network-accessed modifications
+- Visible attribution to the original author
+- Copyleft protections for derivative works
+
+### Attribution Requirement
+
+When using this software, you must prominently display:
+
+```
+Powered by deploy-check-cli by Aryan Yadav
+https://github.com/aryanyadav-dev/deploy-check-atlassian
+```
+
+See [LICENSE](LICENSE) and [NOTICE](NOTICE) for full details.
