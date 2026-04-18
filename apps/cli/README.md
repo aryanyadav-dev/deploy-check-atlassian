@@ -3,7 +3,7 @@
 Analyze code changes for deployment risks before they reach production.
 
 [![npm version](https://img.shields.io/npm/v/deploy-check-cli.svg)](https://www.npmjs.com/package/deploy-check-cli)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 ## Installation
 
@@ -190,6 +190,8 @@ npx husky add .husky/pre-commit "npx deploy-check-cli analyze --fail-on high"
 
 ## License
 
-MIT License
+GNU Affero General Public License v3.0 (AGPL-3.0)
 
-Copyright (c) 2025 Aryan Yadav
+Copyright (C) 2025 Aryan Yadav
+
+This software is licensed under the AGPL-3.0 license. See [LICENSE](../../LICENSE) and [NOTICE](../../NOTICE) for full details.
