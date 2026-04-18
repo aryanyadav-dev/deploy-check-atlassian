@@ -1,0 +1,22 @@
+deploy-check-cli - Deployment Risk Analyzer
+Copyright (C) 2025 Aryan Yadav
+https://github.com/aryanyadav-dev/deploy-check-atlassian
+
+NOTICE: This software includes additional terms under AGPL-3.0 Section 7.
+
+ADDITIONAL TERMS (pursuant to Section 7 of AGPL-3.0):
+
+1. Attribution Requirement: You must preserve the following attribution in
+   all copies or substantial portions of the Software:
+   
+   "deploy-check-cli - Deployment Risk Analyzer
+   Copyright (C) 2025 Aryan Yadav
+   https://github.com/aryanyadav-dev/deploy-check-atlassian"
+
+2. Visible Credit: If the Software is used to provide a service over a network,
+   you must display the following credit prominently in the user interface:
+   
+   "Powered by deploy-check-cli by Aryan Yadav"
+
+3. Modified Versions: Any modified versions must clearly indicate they are
+   derivative works and retain attribution to the original author.
