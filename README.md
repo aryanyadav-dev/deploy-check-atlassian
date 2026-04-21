@@ -1,6 +1,6 @@
 # deploy-check-cli - Deployment Risk Analyzer
 
-A command-line tool that analyzes code changes for deployment risks, including database migrations, breaking API changes, permission changes, and test coverage gaps. Supports multiple programming languages and integrates with Atlassian Jira and Confluence.
+A command-line tool that analyzes code changes for deployment risks, including database migrations, breaking API changes, permission changes, and test coverage gaps. Supports multiple programming languages and integrates with Atlassian Jira, Confluence, and Bitbucket.
 
 [![npm version](https://img.shields.io/npm/v/deploy-check-cli.svg)](https://www.npmjs.com/package/deploy-check-cli)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
@@ -9,64 +9,51 @@ A command-line tool that analyzes code changes for deployment risks, including d
 
 ## How It Works
 
-> **A 3-layer deployment risk analyzer that catches issues before they reach production**
+> **A deployment risk analyzer that catches issues before they reach production**
 
 ```
-┌────────────────────────────────────────────────────────────────────────────┐
-│                         DEPLOYMENT RISK ANALYZER                           │
-├────────────────────────────────────────────────────────────────────────────┤
-│                                                                            │
-│  ┌──────────────────────────────────────────────────────────────────────┐  │
-│  │  LAYER 1: CLI (deploy-check-cli)                                     │  │
-│  │                                                                      │  │
-│  │  $ npm install -g deploy-check-cli                                   │  │
-│  │  $ deploy-check analyze                                              │  │
-│  │                                                                      │  │
-│  │  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐         │  │
-│  │  │ TypeScript │ │   Python   │ │     Go     │ │    Java    │         │  │
-│  │  │  Analyzer  │ │  Analyzer  │ │  Analyzer  │ │  Analyzer  │         │  │
-│  │  └────────────┘ └────────────┘ └────────────┘ └────────────┘         │  │
-│  │  ┌────────────┐ ┌────────────┐ ┌────────────┐                        │  │
-│  │  │   C/C++    │ │   Swift    │ │    Rust    │  <- AST-based          │  │
-│  │  │  Analyzer  │ │  Analyzer  │ │  Analyzer  │     detection          │  │
-│  │  └────────────┘ └────────────┘ └────────────┘                        │  │
-│  │                        │                                             │  │
-│  │                        v                                             │  │
-│  │              ┌──────────────────┐                                    │  │
-│  │              │   Risk Scoring   │  <- Calculates 0-100 score         │  │
-│  │              │      Engine      │                                    │  │
-│  │              └──────────────────┘                                    │  │
-│  └──────────────────────────────────────────────────────────────────────┘  │
-│                                │                                           │
-│                                v                                           │
-│  ┌──────────────────────────────────────────────────────────────────────┐  │
-│  │  LAYER 2: FORGE BACKEND                                              │  │
-│  │                                                                      │  │
-│  │  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐          │  │
-│  │  │ Forge Resolvers│->│ Rovo AI Agent  │->│ Risk Validator │          │  │
-│  │  │ (UI Kit panels)│  │  (6 actions)   │  │   & Scorer     │          │  │
-│  │  └────────────────┘  └────────────────┘  └────────────────┘          │  │
-│  │                                                                      │  │
-│  │  Rovo Agent Actions:                                                 │  │
-│  │  - analyze        : Run deployment risk analysis                     │  │
-│  │  - explain-risk   : AI explanation of findings                       │  │
-│  │  - suggest-fix    : Generate code fixes                              │  │
-│  │  - get-solutions  : Retrieve remediation steps                       │  │
-│  │  - create-issue   : Create Jira issues                               │  │
-│  │  - publish-report : Publish to Confluence                            │  │
-│  └──────────────────────────────────────────────────────────────────────┘  │
-│                    │                            │                          │
-│                    v                            v                          │
-│  ┌────────────────────────────────┐ ┌────────────────────────────────┐     │
-│  │  LAYER 3A: JIRA                │ │  LAYER 3B: CONFLUENCE          │     │
-│  │                                │ │                                │     │
-│  │  - Auto-create issues for      │ │  - Full risk analysis reports  │     │
-│  │    critical findings           │ │  - Deployment runbooks         │     │
-│  │  - Risk badges on issues       │ │  - Historical tracking         │     │
-│  │  - Severity-based priority     │ │  - Team collaboration          │     │
-│  └────────────────────────────────┘ └────────────────────────────────┘     │
-│                                                                            │
-└────────────────────────────────────────────────────────────────────────────┘
+|                         DEPLOYMENT RISK ANALYZER                           |
+|----------------------------------------------------------------------------|
+|                                                                            |
+|  |-----------------------------------------------------------------------|  |
+|  |  CLI (deploy-check-cli)                                              |  |
+|  |                                                                      |  |
+|  |  $ npm install -g deploy-check-cli                                   |  |
+|  |  $ deploy-check analyze                                              |  |
+|  |                                                                      |  |
+|  |  |----------|  |----------|  |----------|  |----------|              |  |
+|  |  | TypeScript |  |   Python   |  |     Go     |  |    Java    |              |  |
+|  |  |  Analyzer  |  |  Analyzer  |  |  Analyzer  |  |  Analyzer  |              |  |
+|  |  |----------|  |----------|  |----------|  |----------|              |  |
+|  |  |   C/C++    |  |   Swift    |  |    Rust    |  <- AST-based          |  |
+|  |  |  Analyzer  |  |  Analyzer  |  |  Analyzer  |     detection          |  |
+|  |  |----------|  |----------|  |----------|                           |  |
+|  |                        |                                             |  |
+|  |                        v                                             |  |
+|  |              |-------------------|                                    |  |
+|  |              |   Risk Scoring   |  <- Calculates 0-100 score         |  |
+|  |              |      Engine      |                                    |  |
+|  |              |-------------------|                                    |  |
+|  |-----------------------------------------------------------------------|  |
+|                                |                                           |
+|                                v                                           |
+|  |-----------------------------------| |----------------------------------|  |
+|  |  JIRA                             | |  CONFLUENCE                     |  |
+|  |                                   | |                                  |  |
+|  |  - Create issues for findings    | |  - Publish risk reports         |  |
+|  |  - Link to PRs                   | |  - Generate runbooks            |  |
+|  |  - Track status                  | |  - Team collaboration           |  |
+|  |-----------------------------------| |----------------------------------|  |
+|                                |                                           |
+|                                v                                           |
+|  |-----------------------------------------------------------------------|  |
+|  |  BITBUCKET                                                       |  |
+|  |                                                                      |  |
+|  |  - List repositories, branches, commits                           |  |
+|  |  - Manage pull requests                                           |  |
+|  |  - Trigger and monitor pipelines                                  |  |
+|  |  - Create and track issues                                        |  |
+|  |-----------------------------------------------------------------------|  |
 ```
 
 ---
@@ -84,7 +71,7 @@ For comprehensive guides, architecture diagrams, and detailed documentation:
 
 - [Installation](#installation)
 - [Supported Languages](#supported-languages)
-- [Atlassian Forge App](#atlassian-forge-app)
+- [Atlassian Integration](#atlassian-integration)
 - [Quick Start](#quick-start)
 - [Commands](#commands)
 - [Configuration](#configuration)
@@ -224,51 +211,34 @@ Detects:
 - Changed function signatures
 - Removed or modified public structs, enums, or traits
 
-## Atlassian Forge App
+## Atlassian Integration
 
-The Deployment Risk Analyzer is also available as an Atlassian Forge app, bringing deployment risk analysis directly into Jira and Confluence.
+The Deployment Risk Analyzer integrates with Atlassian Jira and Confluence via CLI commands.
 
 ### Features
 
-- **Jira Issue Panel**: View deployment risk analysis directly on Jira issues
-- **Confluence Reports**: Automatically publish risk reports to Confluence
-- **Rovo Agent**: AI-powered conversational agent for deployment risk assessment
-- **Risk Badges**: Visual indicators on Jira boards showing deployment risk levels
+- **Jira Integration**: Create and track issues for deployment risks
+- **Confluence Integration**: Publish risk reports and runbooks
+- **Bitbucket Integration**: Manage repositories, PRs, pipelines, and issues
 
-### Installation
+### CLI Commands
 
-Install the Forge app on your Atlassian Cloud site:
+```bash
+# Jira
+deploy-check jira auth
+deploy-check jira create --project KEY
 
-**[Install Deployment Risk Analyzer](https://developer.atlassian.com/console/install/6e6f43d6-6312-46e6-8a22-20ea3401c700)**
+# Confluence
+deploy-check confluence auth
+deploy-check confluence publish --space KEY
 
-> Note: After clicking the link, select your Atlassian site and confirm the installation.
-
-### Rovo Agent Commands
-
-Once installed, you can interact with the Deployment Risk Analyzer agent in Jira or Confluence:
-
+# Bitbucket
+deploy-check bitbucket auth
+deploy-check bitbucket repo list
+deploy-check bitbucket pr list
+deploy-check bitbucket pipeline list
+deploy-check bitbucket issue list
 ```
-@Deployment Risk Analyzer analyze this PR
-@Deployment Risk Analyzer explain the breaking API change risk
-@Deployment Risk Analyzer suggest a fix for the migration issue
-@Deployment Risk Analyzer create an issue for this finding
-@Deployment Risk Analyzer publish a report to Confluence
-```
-
-### App Permissions
-
-The Forge app requires the following permissions:
-
-| Permission | Purpose |
-|------------|---------|
-| Read Jira | Access issue details and linked PRs |
-| Write Jira | Create issues for critical findings |
-| Read Confluence | Access pages for report updates |
-| Write Confluence | Publish deployment risk reports |
-| App Storage | Store configuration and cached results |
-| Read Bitbucket | Access PR details for analysis |
-
-For detailed deployment instructions, see [apps/forge/DEPLOYMENT.md](apps/forge/DEPLOYMENT.md).
 
 ## Quick Start
 
@@ -398,7 +368,7 @@ Create `.deploy-check.json` or `.deploy-check.yaml` in your project root:
 
 ## Risk Scoring
 
-ShipGuard calculates a risk score (0-100) based on findings detected during analysis.
+deploy-check calculates a risk score (0-100) based on findings detected during analysis.
 
 ### Finding Scores
 
@@ -492,7 +462,7 @@ See [CI Integration Guide](apps/cli/docs/CI_INTEGRATION_GUIDE.md) and [Jira & Co
 | Backend | NestJS |
 | Database | Prisma ORM |
 | Queue | BullMQ, Redis |
-| Atlassian | Forge (UI Kit, Resolvers, Triggers) |
+| Atlassian | Jira, Confluence, Bitbucket APIs |
 | Testing | Jest, fast-check (property-based) |
 | Build | tsup, tsc |
 | CI/CD | GitHub Actions |
