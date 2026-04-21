@@ -106,8 +106,73 @@ Publish reports to Atlassian Confluence.
 
 ```bash
 deploy-check confluence auth                # Authenticate
+deploy-check confluence auth --logout       # Remove credentials
 deploy-check confluence publish --space KEY # Publish report
 deploy-check confluence publish --runbook   # Publish runbook
+deploy-check confluence list --space KEY    # List published reports
+```
+
+### `deploy-check bitbucket`
+
+Manage Bitbucket repositories, pull requests, pipelines, and issues.
+
+```bash
+# Authentication
+deploy-check bitbucket auth                # Authenticate with API token
+deploy-check bitbucket auth --logout       # Remove credentials
+
+# Repository Operations
+deploy-check bitbucket repo list                    # List repositories
+deploy-check bitbucket repo list --workspace WORK   # List repos in specific workspace
+deploy-check bitbucket repo branches --repo REPO    # List branches
+deploy-check bitbucket repo commits --repo REPO     # List commits
+deploy-check bitbucket repo commits --repo REPO --branch main  # Commits on branch
+
+# Pull Request Operations
+deploy-check bitbucket pr list              # List pull requests
+deploy-check bitbucket pr list --repo REPO  # List PRs for specific repo
+deploy-check bitbucket pr view --repo REPO --id 1  # View PR details
+deploy-check bitbucket pr diff --repo REPO --id 1  # View PR diff
+deploy-check bitbucket pr create --repo REPO --title "PR Title" --source branch --target main
+
+# Pipeline Operations
+deploy-check bitbucket pipeline list              # List pipelines
+deploy-check bitbucket pipeline list --repo REPO  # List pipelines for repo
+deploy-check bitbucket pipeline view --repo REPO --id 1  # View pipeline details
+deploy-check bitbucket pipeline trigger --repo REPO --branch main  # Trigger pipeline
+
+# Issue Operations
+deploy-check bitbucket issue list              # List issues
+deploy-check bitbucket issue list --repo REPO  # List issues for repo
+deploy-check bitbucket issue list --state open # Filter by state (open, closed, all)
+deploy-check bitbucket issue view --repo REPO --id 1  # View issue details
+deploy-check bitbucket issue create --repo REPO --title "Issue Title"  # Create issue
+deploy-check bitbucket issue create --repo REPO --title "Bug" --kind bug  # With kind (bug, enhancement, proposal)
+```
+
+#### Bitbucket Authentication
+
+Bitbucket uses API tokens for authentication:
+
+1. Go to: `https://bitbucket.org/{workspace}/workspace/settings/oauth/`
+2. Click **API tokens** > **Create API token**
+3. Select scopes:
+   - `read:account` - View account profile
+   - `read:repository:bitbucket` - Read repositories
+   - `write:repository:bitbucket` - Write repositories
+   - `read:pullrequest:bitbucket` - Read pull requests
+   - `write:pullrequest:bitbucket` - Write pull requests
+   - `read:pipeline:bitbucket` - Read pipelines
+   - `write:pipeline:bitbucket` - Write pipelines
+   - `read:issue:bitbucket` - Read issues
+   - `write:issue:bitbucket` - Write issues
+4. Copy the token and run `deploy-check bitbucket auth`
+
+You can also use environment variables:
+```bash
+export BITBUCKET_WORKSPACE=your-workspace
+export BITBUCKET_USERNAME=your-username
+export BITBUCKET_API_TOKEN=your-api-token
 ```
 
 ## Configuration
