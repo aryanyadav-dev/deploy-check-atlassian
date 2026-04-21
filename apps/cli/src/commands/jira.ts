@@ -474,3 +474,186 @@ jiraCommand
       process.exit(1);
     }
   });
+
+// Board subcommand
+jiraCommand
+  .command('board')
+  .description('View and manage Jira boards (Kanban/Scrum)')
+  .option('-l, --list', 'List all accessible boards')
+  .option('-n, --name <boardName>', 'View specific board by name')
+  .option('-i, --id <boardId>', 'View specific board by ID')
+  .option('--issues', 'Show issues on the board')
+  .option('--columns', 'Show board column statistics')
+  .option('-p, --project <projectKey>', 'Filter boards by project key')
+  .option('--debug', 'Show debug information')
+  .action(async (options) => {
+    // Check for credentials
+    const credentials = credentialsStore.getJiraCredentials();
+    if (!credentials) {
+      console.error(
+        chalk.red('Not authenticated. Run `deploy-check jira auth` first.')
+      );
+      process.exit(1);
+    }
+
+    const client = new JiraClient(credentials);
+
+    try {
+      // List all boards
+      if (options.list || (!options.name && !options.id)) {
+        console.log(chalk.bold('Jira Boards'));
+        console.log(chalk.gray('─'.repeat(60)));
+        console.log();
+
+        const boards = await client.getBoards(options.project);
+
+        if (boards.length === 0) {
+          console.log(chalk.yellow('No boards found'));
+          if (options.project) {
+            console.log(chalk.gray(`No boards for project: ${options.project}`));
+          }
+          return;
+        }
+
+        for (const board of boards) {
+          const typeColor = board.type === 'kanban' ? chalk.blue : board.type === 'scrum' ? chalk.green : chalk.gray;
+          console.log(chalk.bold(board.name));
+          console.log(`  ID: ${chalk.gray(board.id)}`);
+          console.log(`  Type: ${typeColor(board.type.toUpperCase())}`);
+          if (board.location) {
+            console.log(`  Project: ${chalk.gray(board.location.projectName)} (${board.location.projectKey})`);
+          }
+          console.log();
+        }
+
+        console.log(chalk.gray(`Total: ${boards.length} board(s)`));
+        console.log();
+        console.log(chalk.gray('Tip: Use --name "Board Name" to view a specific board'));
+        return;
+      }
+
+      // Get specific board by ID or name
+      let board;
+      if (options.id) {
+        const boardId = parseInt(options.id, 10);
+        if (isNaN(boardId)) {
+          console.error(chalk.red('Invalid board ID'));
+          process.exit(1);
+        }
+        board = await client.getBoard(boardId);
+      } else if (options.name) {
+        board = await client.findBoardByName(options.name);
+        if (!board) {
+          console.error(chalk.red(`Board "${options.name}" not found`));
+          console.log(chalk.gray('Use --list to see available boards'));
+          process.exit(1);
+        }
+      }
+
+      if (!board) {
+        console.error(chalk.red('Board not found'));
+        process.exit(1);
+      }
+
+      // Display board header
+      const typeColor = board.type === 'kanban' ? chalk.blue : board.type === 'scrum' ? chalk.green : chalk.gray;
+      console.log(chalk.bold(board.name));
+      console.log(chalk.gray('─'.repeat(60)));
+      console.log(`ID: ${chalk.gray(board.id)}`);
+      console.log(`Type: ${typeColor(board.type.toUpperCase())}`);
+      if (board.location) {
+        console.log(`Project: ${chalk.gray(board.location.projectName)} (${board.location.projectKey})`);
+      }
+      console.log();
+
+      // Show columns
+      if (options.columns || (!options.issues)) {
+        console.log(chalk.bold('Board Columns'));
+        console.log(chalk.gray('─'.repeat(40)));
+
+        const columnStats = await client.getBoardColumnStats(board.id);
+
+        for (const column of columnStats) {
+          const wipIndicator = column.wipMax
+            ? column.issueCount > column.wipMax
+              ? chalk.red(` [WIP: ${column.issueCount}/${column.wipMax}] ⚠️ Over limit`)
+              : chalk.gray(` [WIP: ${column.issueCount}/${column.wipMax}]`)
+            : chalk.gray(` [${column.issueCount} issues]`);
+
+          console.log(chalk.cyan(`${column.columnName}${wipIndicator}`));
+
+          if (column.statuses.length > 0) {
+            console.log(chalk.gray(`  Statuses: ${column.statuses.join(', ')}`));
+          } else if (options.debug) {
+            console.log(chalk.yellow('  [No statuses mapped]'));
+          }
+          console.log();
+        }
+      }
+
+      // Debug: Show raw column config
+      if (options.debug) {
+        console.log(chalk.yellow('Debug: Column configuration from API'));
+        console.log(chalk.gray('─'.repeat(50)));
+        const config = await client.getBoardConfig(board.id);
+        config.columnConfig.columns.forEach((col) => {
+          console.log(`Column: ${col.name}`);
+          console.log(`  Statuses: ${JSON.stringify(col.statuses)}`);
+          console.log(`  WIP: ${col.min || '-'} / ${col.max || '-'}`);
+        });
+      }
+
+      // Show issues
+      if (options.issues) {
+        console.log(chalk.bold('Board Issues'));
+        console.log(chalk.gray('─'.repeat(60)));
+
+        const issues = await client.getIssuesForBoard(board.id, { maxResults: 100 });
+
+        if (issues.length === 0) {
+          console.log(chalk.yellow('No issues on this board'));
+        } else {
+          // Group by status
+          const grouped = issues.reduce((acc, issue) => {
+            const status = issue.fields.status.name;
+            if (!acc[status]) acc[status] = [];
+            acc[status].push(issue);
+            return acc;
+          }, {} as Record<string, typeof issues>);
+
+          for (const [status, statusIssues] of Object.entries(grouped)) {
+            console.log(chalk.cyan(`\n${status} (${statusIssues.length})`));
+            console.log(chalk.gray('─'.repeat(30)));
+
+            for (const issue of statusIssues) {
+              const statusColor =
+                issue.fields.status.statusCategory.key === 'done'
+                  ? chalk.green
+                  : issue.fields.status.statusCategory.key === 'indeterminate'
+                    ? chalk.blue
+                    : chalk.yellow;
+
+              console.log(`${chalk.bold(issue.key)} ${issue.fields.summary}`);
+              console.log(`  Status: ${statusColor(issue.fields.status.name)}`);
+              if (issue.fields.assignee) {
+                console.log(`  Assignee: ${chalk.gray(issue.fields.assignee.displayName)}`);
+              }
+              if (issue.fields.priority) {
+                console.log(`  Priority: ${chalk.gray(issue.fields.priority.name)}`);
+              }
+              console.log(chalk.gray(`  ${credentials.instanceUrl}/browse/${issue.key}`));
+              console.log();
+            }
+          }
+
+          console.log(chalk.gray(`\nTotal: ${issues.length} issue(s)`));
+        }
+      }
+    } catch (error) {
+      console.error(
+        chalk.red('Failed to fetch board data:'),
+        error instanceof Error ? error.message : 'Unknown error'
+      );
+      process.exit(1);
+    }
+  });

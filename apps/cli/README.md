@@ -94,6 +94,10 @@ deploy-check jira auth --logout             # Remove credentials
 deploy-check jira create --project KEY      # Create issues for findings
 deploy-check jira create --severity high    # Filter by severity
 deploy-check jira create --dry-run          # Preview without creating
+deploy-check jira board --list              # List all Jira boards
+deploy-check jira board --name "My Board"   # View board details & columns
+deploy-check jira board --name "My Board" --issues  # Show board issues
+deploy-check jira board --id 123 --columns # Show column statistics
 ```
 
 ### `deploy-check confluence`

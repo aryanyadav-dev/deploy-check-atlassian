@@ -127,3 +127,62 @@ export interface CachedFinding {
   lineEnd?: number;
   jiraIssueKey?: string;
 }
+
+/**
+ * Jira Board (Kanban/Scrum)
+ */
+export interface JiraBoard {
+  id: number;
+  self: string;
+  name: string;
+  type: 'scrum' | 'kanban' | 'simple';
+  location?: {
+    projectId: number;
+    projectName: string;
+    projectKey: string;
+    projectTypeKey: string;
+  };
+}
+
+/**
+ * Jira Board Configuration (columns)
+ */
+export interface JiraBoardConfig {
+  id: number;
+  name: string;
+  type: string;
+  columnConfig: {
+    columns: Array<{
+      name: string;
+      statuses: Array<{
+        id: string;
+        name?: string;
+        self?: string;
+      }>;
+      min?: number;
+      max?: number;
+    }>;
+  };
+  estimation?: {
+    type: string;
+    field: {
+      fieldId: string;
+      name: string;
+    };
+  };
+}
+
+/**
+ * Board Issue with status information
+ */
+export interface BoardIssue extends JiraIssue {
+  fields: JiraIssue['fields'] & {
+    status: {
+      name: string;
+      statusCategory: {
+        key: string;
+        name: string;
+      };
+    };
+  };
+}
