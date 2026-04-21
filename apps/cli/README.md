@@ -255,7 +255,6 @@ npx husky add .husky/pre-commit "npx deploy-check-cli analyze --fail-on high"
 
 - [GitHub Repository](https://github.com/aryanyadav-dev/deploy-check-atlassian)
 - [Full Documentation](https://drive.google.com/drive/folders/1bAd9QNvOacGY-hq025j_Uun0QJFQS0pI)
-- [Atlassian Forge App](https://developer.atlassian.com/console/install/6e6f43d6-6312-46e6-8a22-20ea3401c700)
 
 ## License
 
