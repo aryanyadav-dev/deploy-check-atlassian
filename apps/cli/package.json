@@ -1,6 +1,6 @@
 {
   "name": "deploy-check-cli",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "Deployment Risk Analyzer CLI - Analyze code changes for deployment risks",
   "private": false,
   "license": "AGPL-3.0",

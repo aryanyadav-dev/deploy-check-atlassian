@@ -4,3 +4,4 @@ export { reportCommand } from './report';
 export { runbookCommand } from './runbook';
 export { jiraCommand } from './jira';
 export { confluenceCommand } from './confluence';
+export { bitbucketCommand } from './bitbucket';

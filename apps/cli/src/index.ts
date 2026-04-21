@@ -5,6 +5,7 @@ import { reportCommand } from './commands/report';
 import { runbookCommand } from './commands/runbook';
 import { jiraCommand } from './commands/jira';
 import { confluenceCommand } from './commands/confluence';
+import { bitbucketCommand } from './commands/bitbucket';
 
 const program = new Command();
 
@@ -22,5 +23,6 @@ program.addCommand(reportCommand);
 program.addCommand(runbookCommand);
 program.addCommand(jiraCommand);
 program.addCommand(confluenceCommand);
+program.addCommand(bitbucketCommand);
 
 program.parse(process.argv);
