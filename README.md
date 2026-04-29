@@ -1,6 +1,10 @@
-# deploy-check-cli - Deployment Risk Analyzer
+# deploy-check - Atlassian CLI Tool
 
-A command-line tool that analyzes code changes for deployment risks, including database migrations, breaking API changes, permission changes, and test coverage gaps. Supports multiple programming languages and integrates with Atlassian Jira, Confluence, and Bitbucket.
+A CLI tool for Atlassian suite (Jira, Confluence, Bitbucket) with built-in deployment risk analysis. Like Claude Code but for Atlassian - a terminal-first CLI that works directly with your Atlassian tools.
+
+**Two tools in one:**
+- **Deployment Risk Analyzer** - Catches issues before production (migrations, breaking APIs, permissions, coverage gaps)
+- **Atlassian CLI** - CLI for Jira, Confluence, and Bitbucket
 
 [![npm version](https://img.shields.io/npm/v/deploy-check-cli.svg)](https://www.npmjs.com/package/deploy-check-cli)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
@@ -9,31 +13,29 @@ A command-line tool that analyzes code changes for deployment risks, including d
 
 ## How It Works
 
-> **A deployment risk analyzer that catches issues before they reach production**
+> **A CLI tool for Atlassian suite with deployment risk analysis built in**
 
 ```
-|                         DEPLOYMENT RISK ANALYZER                           |
+|                    DEPLOY-CHECK: ATLASSIAN CLI TOOL                      |
 |----------------------------------------------------------------------------|
 |                                                                            |
 |  |----------------------------------------------------------------------|  |
-|  |  CLI (deploy-check-cli)                                              |  |
+|  |  CLI (deploy-check)                                                  |  |
 |  |                                                                      |  |
 |  |  $ npm install -g deploy-check-cli                                   |  |
-|  |  $ deploy-check analyze                                              |  |
+|  |  $ deploy-check analyze                    # Risk analysis       |  |
+|  |  $ deploy-check jira create --project KEY # Jira ops               |  |
+|  |  $ deploy-check confluence "publish report"                          |  |
 |  |                                                                      |  |
-|  |  |----------|  |----------|  |----------|  |----------|              |  |
-|  |  | TypeScript |  |   Python   |  |     Go     |  |    Java    |      |  |
-|  |  |  Analyzer  |  |  Analyzer  |  |  Analyzer  |  |  Analyzer  |      |  |
-|  |  |----------|  |----------|  |----------|  |----------|              |  |
-|  |  |   C/C++    |  |   Swift    |  |    Rust    |  <- AST-based        |  |
-|  |  |  Analyzer  |  |  Analyzer  |  |  Analyzer  |     detection        |  |
-|  |  |----------|  |----------|  |----------|                            |  |
-|  |                        |                                             |  |
-|  |                        v                                             |  |
-|  |              |-------------------|                                   |  |
-|  |              |   Risk Scoring   |  <- Calculates 0-100 score         |  |
-|  |              |      Engine      |                                    |  |
-|  |              |-------------------|                                   |  |
+|  |  |-------------------|  |-------------------|  |-------------------|  |
+|  |  |  DEPLOYMENT       |  |  CODE             |  |  RISK             |  |
+|  |  |  ANALYZER         |  |  ANALYZER         |  |  SCORING          |  |
+|  |  |                   |  |                   |  |                   |  |
+|  |  | - Migration scan  |  | - AST-based       |  | - 0-100 score     |  |
+|  |  | - API breaking    |  |   detection       |  | - Severity levels |  |
+|  |  | - Permission chgs |  | - 7 languages     |  | - Exit codes      |  |
+|  |  | - Coverage gaps   |  |                   |  |                   |  |
+|  |  |-------------------|  |-------------------|  |-------------------|  |
 |  |----------------------------------------------------------------------|  |
 |                                |                                           |
 |                                v                                           |
@@ -53,6 +55,7 @@ A command-line tool that analyzes code changes for deployment risks, including d
 |  |  - Manage pull requests                                              |  |
 |  |  - Trigger and monitor pipelines                                     |  |
 |  |  - Create and track issues                                           |  |
+|  |  - Full CLI access to repos, PRs, pipelines, issues                  |  |
 |  |----------------------------------------------------------------------|  |
 ```
 
@@ -243,9 +246,17 @@ deploy-check bitbucket issue list
 ## Quick Start
 
 ```bash
+# Deployment Risk Analysis
 deploy-check analyze                    # Analyze against main branch
 deploy-check analyze --base develop     # Analyze against specific branch
 deploy-check analyze --json             # Output as JSON
+
+# Atlassian CLI 
+deploy-check jira create --project KEY  # Create Jira issues
+deploy-check confluence publish --space DEVOPS  # Publish to Confluence
+deploy-check bitbucket pr list          # List PRs
+
+# Utilities
 deploy-check runbook                    # Generate deployment runbook
 deploy-check config init                # Initialize configuration
 deploy-check config show                # Show current configuration
