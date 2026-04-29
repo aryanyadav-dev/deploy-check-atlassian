@@ -16,15 +16,14 @@ A CLI tool for Atlassian suite (Jira, Confluence, Bitbucket) with built-in deplo
 > **A CLI tool for Atlassian suite with deployment risk analysis built in**
 
 ```
-|                    DEPLOY-CHECK: ATLASSIAN CLI TOOL                      |
+|                    DEPLOY-CHECK: ATLASSIAN CLI TOOL                        |
 |----------------------------------------------------------------------------|
 |                                                                            |
 |  |----------------------------------------------------------------------|  |
 |  |  CLI (deploy-check)                                                  |  |
 |  |                                                                      |  |
 |  |  $ npm install -g deploy-check-cli                                   |  |
-|  |  $ deploy-check analyze                    # Risk analysis       |  |
-|  |  $ deploy-check jira create --project KEY # Jira ops               |  |
+|  |  $ deploy-check analyze                    # Risk analysis           |  |
 |  |  $ deploy-check confluence "publish report"                          |  |
 |  |                                                                      |  |
 |  |  |-------------------|  |-------------------|  |-------------------|  |
