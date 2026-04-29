@@ -15,45 +15,45 @@ A command-line tool that analyzes code changes for deployment risks, including d
 |                         DEPLOYMENT RISK ANALYZER                           |
 |----------------------------------------------------------------------------|
 |                                                                            |
-|  |-----------------------------------------------------------------------|  |
+|  |----------------------------------------------------------------------|  |
 |  |  CLI (deploy-check-cli)                                              |  |
 |  |                                                                      |  |
 |  |  $ npm install -g deploy-check-cli                                   |  |
 |  |  $ deploy-check analyze                                              |  |
 |  |                                                                      |  |
 |  |  |----------|  |----------|  |----------|  |----------|              |  |
-|  |  | TypeScript |  |   Python   |  |     Go     |  |    Java    |              |  |
-|  |  |  Analyzer  |  |  Analyzer  |  |  Analyzer  |  |  Analyzer  |              |  |
+|  |  | TypeScript |  |   Python   |  |     Go     |  |    Java    |      |  |
+|  |  |  Analyzer  |  |  Analyzer  |  |  Analyzer  |  |  Analyzer  |      |  |
 |  |  |----------|  |----------|  |----------|  |----------|              |  |
-|  |  |   C/C++    |  |   Swift    |  |    Rust    |  <- AST-based          |  |
-|  |  |  Analyzer  |  |  Analyzer  |  |  Analyzer  |     detection          |  |
-|  |  |----------|  |----------|  |----------|                           |  |
+|  |  |   C/C++    |  |   Swift    |  |    Rust    |  <- AST-based        |  |
+|  |  |  Analyzer  |  |  Analyzer  |  |  Analyzer  |     detection        |  |
+|  |  |----------|  |----------|  |----------|                            |  |
 |  |                        |                                             |  |
 |  |                        v                                             |  |
-|  |              |-------------------|                                    |  |
+|  |              |-------------------|                                   |  |
 |  |              |   Risk Scoring   |  <- Calculates 0-100 score         |  |
 |  |              |      Engine      |                                    |  |
-|  |              |-------------------|                                    |  |
-|  |-----------------------------------------------------------------------|  |
+|  |              |-------------------|                                   |  |
+|  |----------------------------------------------------------------------|  |
 |                                |                                           |
 |                                v                                           |
-|  |-----------------------------------| |----------------------------------|  |
-|  |  JIRA                             | |  CONFLUENCE                     |  |
-|  |                                   | |                                  |  |
+|  |-----------------------------------| |--------------------------------|  |
+|  |  JIRA                             | |  CONFLUENCE                    |  |
+|  |                                   | |                                |  |
 |  |  - Create issues for findings    | |  - Publish risk reports         |  |
 |  |  - Link to PRs                   | |  - Generate runbooks            |  |
 |  |  - Track status                  | |  - Team collaboration           |  |
-|  |-----------------------------------| |----------------------------------|  |
+|  |-----------------------------------| |--------------------------------|  |
 |                                |                                           |
 |                                v                                           |
-|  |-----------------------------------------------------------------------|  |
-|  |  BITBUCKET                                                       |  |
+|  |----------------------------------------------------------------------|  |
+|  |  BITBUCKET                                                           |  |
 |  |                                                                      |  |
-|  |  - List repositories, branches, commits                           |  |
-|  |  - Manage pull requests                                           |  |
-|  |  - Trigger and monitor pipelines                                  |  |
-|  |  - Create and track issues                                        |  |
-|  |-----------------------------------------------------------------------|  |
+|  |  - List repositories, branches, commits                              |  |
+|  |  - Manage pull requests                                              |  |
+|  |  - Trigger and monitor pipelines                                     |  |
+|  |  - Create and track issues                                           |  |
+|  |----------------------------------------------------------------------|  |
 ```
 
 ---
